@@ -1,0 +1,23 @@
+{
+    "PersonalData" : {
+        "Name": "David",
+        "School": ["WCAS"],
+        "Major": ["CS"],
+        "Gender": ["Male"],
+        "Age": 1356,
+        "ExperienceLevel": "3-5 Years",
+        "WorkoutFrequency": 5,
+        "UsualWorkoutTime": "Morning",
+        "Goals": ["Weightloss", "Powerlifting"],
+        "GymPreference": "SPAC"
+    },
+    "PartnerPreferences" : {
+        "Gender": ["Male"],
+        "Age": 1356,
+        "ExperienceLevel": "5+ Years",
+        "WorkoutFrequency": 5,
+        "UsualWorkoutTime": "Morning",
+        "Goals": ["Powerlifting"],
+        "GymPreference": "SPAC"
+    }
+}
