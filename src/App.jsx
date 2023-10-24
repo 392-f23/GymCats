@@ -6,10 +6,9 @@ import LoginPage from './pages/LoginPage'
 import OnboardingPersonalPage from './screens/OnboardingPersonalPage'
 import HomePage from './pages/HomePage'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useTheme } from '@mui/material'
-
 import './App.css'
 import { ThemeProvider } from '@mui/material'
+import { theme } from './Theme';
 
 const privateRoutes = [
   { path: "/onboardingPersonal", component: () => <OnboardingPersonalPage /> },
@@ -21,7 +20,6 @@ const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
 
 function App() {
   const [count, setCount] = useState(0);
-  const theme = useTheme();
   
   return (
     <ThemeProvider theme={theme}>

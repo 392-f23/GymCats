@@ -25,5 +25,23 @@ export const theme = createTheme({
     breakpoints: {
         values: {...breakpoints},
         unit: "px",
+    },
+    typography: {
+        body1: {
+            fontFamily: "Oxygen",
+            fontSize: "1.5rem",
+            fontWeight: 400,
+        },
+        p: {
+            fontFamily: "Oxygen",
+            fontSize: "1rem",
+            fontWeight: 300,
+        },
+        button: {
+            textTransform: "none",
+            fontFamily: "Oxygen",
+            fontSize: "1rem",
+            fontWeight: 400,
+        }
     }
 });

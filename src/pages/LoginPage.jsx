@@ -1,17 +1,26 @@
 import "../App.css";
-import ToggleButton from "../components/ToggleButton";
 import SignInButton from "../components/SignInButton";
-import { Box } from "@mui/material";
+import MultiSelect from "../components/MultiSelect";
+import SingleSelect from "../components/SingleSelect";
+import TextInput from "../components/TextInput";
 
 const LoginPage = () => {
-    return (
-        <div className="login-container">
-            <h1>Welcome to GymCats!</h1>
-            <SignInButton/>
-            <br></br>
-            <ToggleButton label={"Test"} value={"test"} onChange={""} />
-        </div>
-    );
-}
+  return (
+    <div className="login-container">
+      <h1>Welcome to GymCats!</h1>
+      <SignInButton />
+      <br></br>
+      <MultiSelect label={"Gender"} />
+      <br></br>
+      <SingleSelect
+        label={"Gender"}
+        options={["Male", "Female", "Nonbinary", "Other"]}
+        values={["male", "female", "nonbinary", "other"]}
+      />
+      <br></br>
+      <TextInput label={"Age"} />
+    </div>
+  );
+};
 
 export default LoginPage;
