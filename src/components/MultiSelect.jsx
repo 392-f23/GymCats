@@ -2,7 +2,7 @@ import ToggleButton from "./ToggleButton";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 
-function MultiSelect({ label }) {
+function MultiSelect({ label, showNoPreference = false }) {
   const [selectedList, setSelectedList] = useState([]);
 
   const handleToggle = (value) => {
@@ -27,6 +27,7 @@ function MultiSelect({ label }) {
         justifyContent: "flex-start",
         alignItems: "flex-start",
         flexDirection: "column",
+        marginBottom: "30px",
       }}
     >
       <Typography variant="body1">{label}</Typography>
@@ -55,6 +56,13 @@ function MultiSelect({ label }) {
           onToggle={handleToggle}
         />
         <ToggleButton label={"Other"} value={"other"} onToggle={handleToggle} />
+        {showNoPreference && (
+          <ToggleButton
+            label={"No Preference"}
+            value={"No Preference"}
+            onToggle={handleToggle}
+          />
+        )}
       </Box>
     </Box>
   );

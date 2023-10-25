@@ -38,6 +38,7 @@ function SingleSelect({ label, options, values }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "flex-start",
+        marginBottom: "30px",
       }}
     >
       <FormLabel id={`${label}-label`}>
@@ -45,9 +46,7 @@ function SingleSelect({ label, options, values }) {
           {label}
         </Typography>
       </FormLabel>
-      <Typography variant="p">
-        Select one.
-      </Typography>
+      <Typography variant="p">Select one.</Typography>
       <RadioGroup
         aria-labelledby={`${label}-label`}
         value={selected}
