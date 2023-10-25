@@ -18,6 +18,7 @@ function TextInput({ label }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        marginBottom: "30px",
       }}
     >
       <Typography variant="body1" sx={{ mr: 3 }}>
