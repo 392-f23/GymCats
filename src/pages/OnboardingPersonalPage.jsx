@@ -6,8 +6,17 @@ import TextInput from "../components/TextInput";
 import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
 
-const OnboardingPersonalPage = () => {
+const OnboardingPersonalPage = ({ previousStep, nextStep }) => {
   const navigate = useNavigate();
+
+  const GoBack = () => {
+    // todo: make user sign out
+    previousStep();
+  }
+
+  const Continue = () => {
+    nextStep();
+  }
 
   return (
     <Box sx={{ backgroundColor: "#21212F" }}>
@@ -49,7 +58,7 @@ const OnboardingPersonalPage = () => {
         <Button
           fullWidth
           variant="contained"
-          onClick={() => navigate("/onboardingPreference")}
+          onClick={Continue}
         >
           Continue
         </Button>

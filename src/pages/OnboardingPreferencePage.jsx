@@ -5,8 +5,17 @@ import SingleSelect from "../components/SingleSelect";
 import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
 
-const OnboardingPreferencePage = () => {
+const OnboardingPreferencePage = ({ previousStep, nextStep }) => {
   const navigate = useNavigate();
+
+  const GoBack = () => {
+    previousStep();
+  }
+
+  const Continue = () => {
+    // todo: submit to database
+    nextStep();
+  }
 
   return (
     <Box sx={{ backgroundColor: "#21212F" }}>
@@ -50,7 +59,7 @@ const OnboardingPreferencePage = () => {
             values={["beginner", "intermediate", "advanced", "expert"]}
           />
         </Box>
-        <Button fullWidth variant="contained" onClick={() => navigate("/home")}>
+        <Button fullWidth variant="contained" onClick={Continue}>
           Finish
         </Button>
       </Container>
