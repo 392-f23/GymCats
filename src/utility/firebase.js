@@ -175,30 +175,12 @@ const isOnboarded = async () => {
   }
 };
 
-const submitOnboardingInformation = async (
-  income,
-  budget,
-  rent,
-  food,
-  transportation
-) => {
-  const id = localStorage.getItem("uid");
+const submitFormInformation = async (dbState) => {
+  // const id = localStorage.getItem("uid");
+  const id = "test";
   const userDocRef = doc(db, "users", id);
-  const userData = {
-    income: income,
-    budget: budget,
-    budgetByCategory: {
-      Rent: rent,
-      Food: food,
-      Transport: transportation,
-    },
-    SpendingHistory: [],
-  };
-
-  await setDoc(userDocRef, userData, { merge: true });
-  await updateDoc(userDocRef, {
-    onboarded: true,
-  });
+  await setDoc(userDocRef, dbState, { merge: true });
+  await updateDoc(userDocRef, dbState);
 };
 
 export const addExpense = async (newSpending) => {
@@ -309,5 +291,7 @@ export {
   handleLogOut,
   checkIfLoggedIn,
   isOnboarded,
-  submitOnboardingInformation,
+  submitFormInformation,
 };
+
+export default submitFormInformation

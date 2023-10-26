@@ -2,7 +2,7 @@ import ToggleButton from "./ToggleButton";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 
-function MultiSelect({ label, showNoPreference = false }) {
+function MultiSelect({ label, dbUpdate, dbKey, showNoPreference = false}) {
   const [selectedList, setSelectedList] = useState([]);
 
   const handleToggle = (value) => {
@@ -16,6 +16,11 @@ function MultiSelect({ label, showNoPreference = false }) {
     }
 
     setSelectedList(newSelectedList);
+    //db update
+    dbUpdate(prevState => {
+      prevState[dbKey[0]][dbKey[1]] = newSelectedList
+      return prevState                                 
+    })
   };
 
   return (

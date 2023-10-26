@@ -1,6 +1,7 @@
 import { useState } from "react";
 import OnboardingPreferencePage from "./pages/OnboardingPreferencePage";
 import LoginPage from "./pages/LoginPage";
+import FormPage from "./pages/FormPage";
 import OnboardingPersonalPage from "./pages/OnboardingPersonalPage";
 import HomePage from "./pages/HomePage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -17,7 +18,7 @@ const privateRoutes = [
   { path: "/home", component: () => <HomePage /> },
 ];
 
-const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
+const publicRoutes = [{ path: "/login", component: () => <FormPage /> }];
 
 function App() {
   return (

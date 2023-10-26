@@ -1,49 +1,63 @@
-import { Box, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Typography, Button, useTheme } from "@mui/material";
 import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import TextInput from "../components/TextInput";
 import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
+import { StyledDivider } from "../components/StyledDivider";
 
-const OnboardingPersonalPage = ({ previousStep, nextStep }) => {
-  const navigate = useNavigate();
+const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
+  const theme = useTheme();
 
   const GoBack = () => {
     // todo: make user sign out
     previousStep();
-  }
+  };
 
   const Continue = () => {
+    // update DB
     nextStep();
-  }
+  };
 
   return (
-    <Box sx={{ backgroundColor: "#21212F" }}>
+    <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
       <Container>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <h1>GymCats</h1>
+          <Typography variant="h1">GymCats</Typography>
           <Box
             component="img"
             src={photoUrl}
             sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />
         </Box>
-        <hr />
-        <Box>
-          <Typography
-            variant="h1"
-            style={{ fontSize: "1em", marginBottom: "20px" }}
-          >
+        <StyledDivider />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography variant="p" sx={{ mb: 4 }}>
             Hi David, please fill out your information!
           </Typography>
-          <MultiSelect label={"Gender"} />
-          <TextInput label={"Age"} />
+          <MultiSelect
+            label={"Gender"}
+            dbUpdate={updateDB}
+            dbKey={["PersonalData", "Gender"]}
+          />
+          <TextInput
+            label={"Age"}
+            dbUpdate={updateDB}
+            dbKey={["PersonalData", "Age"]}
+          />
           <SingleSelect
             label={"Experience Level"}
             options={[
@@ -53,15 +67,49 @@ const OnboardingPersonalPage = ({ previousStep, nextStep }) => {
               "Expert (5+ years)",
             ]}
             values={["beginner", "intermediate", "advanced", "expert"]}
+            dbUpdate={updateDB}
+            dbKey={["PersonalData", "ExperienceLevel"]}
           />
         </Box>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={Continue}
+        <Box
+          sx={{ 
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            justifyContent: "space-between",
+            alignitems: "center",
+           }}
         >
-          Continue
-        </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={GoBack}
+            sx={{
+              borderRadius: "40px",
+              mr: 4,
+              "&:hover": {
+                backgroundColor: theme.palette.primary[3],
+              },
+            }}
+          >
+            Go Back
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={Continue}
+            sx={{
+              borderRadius: "40px",
+              backgroundColor: theme.palette.primary[2],
+              color: theme.palette.text.secondary,
+              "&:hover": {
+                backgroundColor: theme.palette.primary[4],
+              },
+            }}
+          >
+            Continue
+          </Button>
+        </Box>
       </Container>
     </Box>
   );
