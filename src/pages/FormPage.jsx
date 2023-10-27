@@ -7,9 +7,9 @@ function FormPage() {
   const [step, setStep] = useState(1);
   //db state to push to firebase
   const [dbState, setDBState] = useState({
-    "PersonalData" : {},
-    "PartnerPreferences" : {}
-});
+    PersonalData: {},
+    PartnerPreferences: {},
+  });
 
   const previousStep = () => {
     setStep(step - 1);
@@ -26,31 +26,30 @@ function FormPage() {
       page = <LoginPage />;
       break;
     case 1:
-      page =  <OnboardingPersonalPage
-        updateDB={setDBState}
-        previousStep={previousStep}
-        nextStep={nextStep}
-      />;
+      page = (
+        <OnboardingPersonalPage
+          updateDB={setDBState}
+          previousStep={previousStep}
+          nextStep={nextStep}
+        />
+      );
       break;
     case 2:
-      page = <OnboardingPreferencePage
-        updateDB={setDBState}
-        previousStep={previousStep}
-        nextStep={nextStep}
-        dbState={dbState}
-      />;
+      page = (
+        <OnboardingPreferencePage
+          updateDB={setDBState}
+          previousStep={previousStep}
+          nextStep={nextStep}
+          dbState={dbState}
+        />
+      );
       break;
     case 3:
-      page  = <HomePage />;
+      page = <HomePage />;
       break;
   }
 
-  
-  return (
-    <>
-    {page}
-    </>
-  );
+  return <>{page}</>;
 }
 
 export default FormPage;

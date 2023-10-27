@@ -10,15 +10,16 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./Theme";
 
 const privateRoutes = [
-  { path: "/onboardingPersonal", component: () => <OnboardingPersonalPage /> },
-  {
-    path: "/onboardingPreference",
-    component: () => <OnboardingPreferencePage />,
-  },
+  // { path: "/onboardingPersonal", component: () => <OnboardingPersonalPage /> },
+  // {
+  //   path: "/onboardingPreference",
+  //   component: () => <OnboardingPreferencePage />,
+  // },
+  { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
 ];
 
-const publicRoutes = [{ path: "/login", component: () => <FormPage /> }];
+const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
 
 function App() {
   return (
