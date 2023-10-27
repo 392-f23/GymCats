@@ -5,13 +5,17 @@ import TextInput from "../components/TextInput";
 import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
+import { handleLogOut } from "../utility/firebase";
+import { useNavigate } from "react-router-dom";
 
 const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const GoBack = () => {
     // todo: make user sign out
-    previousStep();
+    handleLogOut(navigate);
+    // previousStep();
   };
 
   const Continue = () => {
@@ -72,13 +76,13 @@ const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
           />
         </Box>
         <Box
-          sx={{ 
+          sx={{
             width: "100%",
             height: "auto",
             display: "flex",
             justifyContent: "space-between",
             alignitems: "center",
-           }}
+          }}
         >
           <Button
             fullWidth
