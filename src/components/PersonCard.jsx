@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-function PersonCard({ person, photoURL }) {
+function PersonCard({ person, photoURL, handleInterested, handleNotInterested }) {
   const info = person.personal_info;
   const age = info.Age;
   const experience = info.Experience_Level;
@@ -22,6 +22,7 @@ function PersonCard({ person, photoURL }) {
   const freq = info.Workout_Frequency;
   const gender = info.Gender;
   const name = info.Name;
+  const id = info.id;
 
   const theme = useTheme();
 
@@ -166,8 +167,9 @@ function PersonCard({ person, photoURL }) {
                   backgroundColor: theme.palette.primary[4],
                 }
               }}
+              onClick={() => handleInterested(name, id)}
             >
-              <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
+              <Typography variant="p" sx={{ fontSize: "0.9rem" }} >
                 Interested
               </Typography>
             </Button>
@@ -182,6 +184,7 @@ function PersonCard({ person, photoURL }) {
                   backgroundColor: theme.palette.primary[3],
                 }
               }}
+              onClick={() => handleNotInterested(id)}
             >
               <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
                 Not Interested
