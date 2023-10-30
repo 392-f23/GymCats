@@ -64,7 +64,7 @@ const OnboardingPersonalPage = ({ previousStep, nextStep }) => {
         </Button>
       </Container>
     </Box>
-  );
+  )
 };
 
 export default OnboardingPersonalPage;
