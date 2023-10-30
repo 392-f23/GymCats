@@ -1,12 +1,13 @@
 import "../App.css";
 import SignInButton from "../components/SignInButton";
+import { Box, Typography } from "@mui/material";
 
 const LoginPage = () => {
   return (
-    <div className="login-container">
-      <h1>Welcome to GymCats!</h1>
+    <Box className="login-container">
+      <Typography variant="h1">Welcome to GymCats!</Typography>
       <SignInButton />
-    </div>
+    </Box>
   );
 };
 

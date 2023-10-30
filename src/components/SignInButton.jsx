@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { handleLogin } from "../utility/firebase";
+import { signUpWithGoogle } from "../utility/firebase";
 import { useNavigate } from "react-router-dom";
 
 const SignInButton = () => {
@@ -10,8 +10,8 @@ const SignInButton = () => {
     <Button
       variant="outlined"
       size="small"
-      onClick={() => navigate("/onboardingPersonal")}
-      startIcon={<GoogleIcon />}
+      onClick={() => signUpWithGoogle(navigate)}
+      startIcon={<GoogleIcon sx={{ width: "40px", height: "40px" }} />}
       sx={{
         marginTop: "50px",
         width: "360px",
@@ -19,6 +19,7 @@ const SignInButton = () => {
         color: "#ffffff",
         fontWeight: "bolder",
         borderRadius: "30px",
+        fontSize: "1.4rem",
       }}
     >
       Sign In With Google

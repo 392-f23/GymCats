@@ -17,26 +17,18 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  // apiKey: "AIzaSyCzLs1kyY9QCLjdk7cTXP0NNOYmmRoVl4U",
-  // authDomain: "gymbuddy-e9e14.firebaseapp.com",
-  // projectId: "gymbuddy-e9e14",
-  // storageBucket: "gymbuddy-e9e14.appspot.com",
-  // messagingSenderId: "930913179368",
-  // appId: "1:930913179368:web:76edd7769ae673bef05b5d",
-  // measurementId: "G-K3JSSHGDW7"
   apiKey: "AIzaSyCheiE1GJdxLHhv5Fb2ur_HN9sP6m3a8Sk",
   authDomain: "gymcats-4c921.firebaseapp.com",
   projectId: "gymcats-4c921",
   storageBucket: "gymcats-4c921.appspot.com",
   messagingSenderId: "947718356723",
   appId: "1:947718356723:web:bbcd0a1e16f99dcd034186",
-  measurementId: "G-3THLV2DSEV"
+  measurementId: "G-3THLV2DSEV",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
@@ -51,14 +43,14 @@ const useAuthState = () => {
 };
 
 const handleLogin = async (navigate) => {
-  console.log("auth: ")
-  console.log(auth)
-  console.log("provider: ")
-  console.log(provider)
+  console.log("auth: ");
+  console.log(auth);
+  console.log("provider: ");
+  console.log(provider);
   signInWithPopup(auth, provider)
     .then(async (result) => {
       const user = result.user;
-      
+
       // Check if the user's email is associated with an existing account
       const signInMethods = await fetchSignInMethodsForEmail(auth, user.email);
 
@@ -120,11 +112,6 @@ const signUpWithGoogle = async (navigate) => {
           displayName: user.displayName,
           photoURL: user.photoURL,
           onboarded: false,
-          expenses: {
-            Rent: { total: 0, subExpense: { BaseRent: 0, Utilities: 0 } },
-            Food: { total: 0, subExpense: { Groceries: 0, "Dine-Out": 0 } },
-            Transport: { total: 0, subExpense: { Uber: 0, CTA: 0 } },
-          },
         };
 
         await setDoc(userDocRef, userData, { merge: true });
@@ -175,30 +162,12 @@ const isOnboarded = async () => {
   }
 };
 
-const submitOnboardingInformation = async (
-  income,
-  budget,
-  rent,
-  food,
-  transportation
-) => {
-  const id = localStorage.getItem("uid");
+const submitFormInformation = async (dbState) => {
+  // const id = localStorage.getItem("uid");
+  const id = "test";
   const userDocRef = doc(db, "users", id);
-  const userData = {
-    income: income,
-    budget: budget,
-    budgetByCategory: {
-      Rent: rent,
-      Food: food,
-      Transport: transportation,
-    },
-    SpendingHistory: [],
-  };
-
-  await setDoc(userDocRef, userData, { merge: true });
-  await updateDoc(userDocRef, {
-    onboarded: true,
-  });
+  await setDoc(userDocRef, dbState, { merge: true });
+  await updateDoc(userDocRef, dbState);
 };
 
 export const addExpense = async (newSpending) => {
@@ -309,5 +278,7 @@ export {
   handleLogOut,
   checkIfLoggedIn,
   isOnboarded,
-  submitOnboardingInformation,
+  submitFormInformation,
 };
+
+export default submitFormInformation;

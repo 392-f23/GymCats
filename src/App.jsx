@@ -1,49 +1,91 @@
-import { useState } from "react";
-import OnboardingPreferencePage from "./pages/OnboardingPreferencePage";
+import { useState, useEffect } from "react";
 import LoginPage from "./pages/LoginPage";
-import OnboardingPersonalPage from "./pages/OnboardingPersonalPage";
+import FormPage from "./pages/FormPage";
 import HomePage from "./pages/HomePage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import "./App.css";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./Theme";
+import {
+  checkIfLoggedIn,
+  isOnboarded as checkIfOnboarded,
+} from "./utility/firebase";
+import LoadingContainer from "./components/LoadingContainer";
+import "./App.css";
 
 const privateRoutes = [
-  { path: "/onboardingPersonal", component: () => <OnboardingPersonalPage /> },
-  {
-    path: "/onboardingPreference",
-    component: () => <OnboardingPreferencePage />,
-  },
+  { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
 ];
 
 const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
 
 function App() {
+  const isSignedIn = checkIfLoggedIn();
+  const [isOnboarded, setIsOnboarded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      const onboarded = await checkIfOnboarded();
+      setIsOnboarded(onboarded);
+      setIsLoading(false);
+    };
+
+    init();
+  }, []);
+
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          {/* // need to handle routes once we add authentication*/}
-          <Route path="*" element={<Navigate to="/login" />} />
-          <Route path="/" element={<Navigate to="/login" />} />
-          {publicRoutes.map((route) => (
+    <LoadingContainer isLoading={isLoading}>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          {/* {isSignedIn && !isOnboarded && <Navigate to="/onboarding" />} */}
+          <Routes>
             <Route
-              path={route.path}
-              key={route.path}
-              element={<route.component />}
+              path="*"
+              element={
+                isSignedIn ? (
+                  <Navigate to="/onboarding" />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
-          ))}
-          {privateRoutes.map((route) => (
             <Route
-              path={route.path}
-              key={route.path}
-              element={<route.component />}
+              path="/"
+              element={
+                isSignedIn ? (
+                  <Navigate to="/onboarding" />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
-          ))}
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+            {publicRoutes.map((route) => (
+              <Route
+                path={route.path}
+                key={route.path}
+                element={
+                  isSignedIn ? (
+                    <Navigate to="/onboarding" />
+                  ) : (
+                    <route.component />
+                  )
+                }
+              />
+            ))}
+            {privateRoutes.map((route) => (
+              <Route
+                path={route.path}
+                key={route.path}
+                element={
+                  isSignedIn ? <route.component /> : <Navigate to="/login" />
+                }
+              />
+            ))}
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </LoadingContainer>
   );
 }
 

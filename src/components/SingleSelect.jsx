@@ -10,13 +10,17 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-function SingleSelect({ label, options, values }) {
+function SingleSelect({ label, options, values, dbUpdate ,dbKey }) {
   const theme = useTheme();
-
   const [selected, setSelected] = useState("");
 
   const handleChange = (value) => {
     setSelected(value);
+    dbUpdate(prevState => {
+      prevState[dbKey[0]][dbKey[1]] = value
+      // console.log(prevState)
+      return prevState                                 
+    })
   };
 
   const StyledRadio = styled(Radio)(({ theme }) => ({

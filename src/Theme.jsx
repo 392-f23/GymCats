@@ -27,6 +27,16 @@ export const theme = createTheme({
         unit: "px",
     },
     typography: {
+        h1: {
+            fontFamily: "Kanit",
+            fontSize: "3.5rem",
+            fontWeight: 700,
+        },
+        h5: {
+            fontFamily: "Kanit",
+            fontSize: "1.2rem",
+            fontWeight: 600,
+        },
         body1: {
             fontFamily: "Oxygen",
             fontSize: "1.5rem",
