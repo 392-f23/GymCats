@@ -59,6 +59,12 @@ const OnboardingPreferencePage = ({
             dbUpdate={updateDB}
             dbKey={["PartnerPreferences", "Gender"]}
             showNoPreference={true}
+            options={[
+              "Male",
+              "Female",
+              "Nonbinary",
+              "Other"
+            ]}
           />
           <SingleSelect
             label={"Age"}

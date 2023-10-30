@@ -1,27 +1,54 @@
-import ToggleButton from "./ToggleButton";
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  styled,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 
-function MultiSelect({ label, dbUpdate, dbKey, showNoPreference = false}) {
+function MultiSelect({
+  label,
+  dbUpdate,
+  dbKey,
+  showNoPreference = false,
+  options,
+}) {
   const [selectedList, setSelectedList] = useState([]);
 
-  const handleToggle = (value) => {
-    const currentIndex = selectedList.indexOf(value);
-    const newSelectedList = [...selectedList];
-
-    if (currentIndex === -1) {
-      newSelectedList.push(value);
-    } else {
-      newSelectedList.splice(currentIndex, 1);
-    }
-
+  const handleToggle = (event, newSelectedList) => {
     setSelectedList(newSelectedList);
-    //db update
-    dbUpdate(prevState => {
-      prevState[dbKey[0]][dbKey[1]] = newSelectedList
-      return prevState                                 
-    })
+
+    // db update
+    dbUpdate((prevState) => {
+      prevState[dbKey[0]][dbKey[1]] = newSelectedList;
+      return prevState;
+    });
   };
+
+  const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
+    width: "fit-content",
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.getContrastText(theme.palette.text.secondary),
+    padding: "5px 15px",
+    transition: "background-color 0.3s ease-in-out",
+    "&:hover": {
+      backgroundColor: theme.palette.primary[3],
+    },
+    "&.MuiToggleButtonGroup-grouped:not(:last-of-type)": {
+      borderRadius: "40px",
+    },
+    "&.MuiToggleButtonGroup-grouped:not(:first-of-type)": {
+      borderRadius: "40px",
+    },
+    "&.Mui-selected": {
+      backgroundColor: theme.palette.primary[2],
+      color: theme.palette.getContrastText(theme.palette.text.primary),
+    },
+    "&.Mui-selected:hover": {
+      backgroundColor: theme.palette.primary[4],
+    },
+  }));
 
   return (
     <Box
@@ -39,7 +66,9 @@ function MultiSelect({ label, dbUpdate, dbKey, showNoPreference = false}) {
       <Typography variant="p" sx={{ pb: 2 }}>
         Select all that apply.
       </Typography>
-      <Box
+      <ToggleButtonGroup
+        value={selectedList}
+        onChange={handleToggle}
         sx={{
           width: "100%",
           height: "auto",
@@ -49,26 +78,17 @@ function MultiSelect({ label, dbUpdate, dbKey, showNoPreference = false}) {
           flexWrap: "wrap",
         }}
       >
-        <ToggleButton label={"Male"} value={"male"} onToggle={handleToggle} />
-        <ToggleButton
-          label={"Female"}
-          value={"female"}
-          onToggle={handleToggle}
-        />
-        <ToggleButton
-          label={"Nonbinary"}
-          value={"nonbinary"}
-          onToggle={handleToggle}
-        />
-        <ToggleButton label={"Other"} value={"other"} onToggle={handleToggle} />
+        {options.map((option) => (
+          <StyledToggleButton key={option} value={option} sx={{ mr: 2, mb: 2 }}>
+            {option}
+          </StyledToggleButton>
+        ))}
         {showNoPreference && (
-          <ToggleButton
-            label={"No Preference"}
-            value={"No Preference"}
-            onToggle={handleToggle}
-          />
+          <StyledToggleButton label={"No Preference"} value={"No Preference"}>
+            No Preference
+          </StyledToggleButton>
         )}
-      </Box>
+      </ToggleButtonGroup>
     </Box>
   );
 }

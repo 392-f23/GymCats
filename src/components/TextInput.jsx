@@ -1,10 +1,33 @@
 import { Grid, TextField, Typography, useTheme } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { db } from "../utility/firebase";
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 function TextInput({ label, dbUpdate, dbKey }) {
   const theme = useTheme();
-
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // replace 'test' with user id
+        const userDocRef = doc(db, "users", 'test');
+        const doc2 = await getDoc(userDocRef);
+        if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
+          setValue(doc2.data()[dbKey[0]][dbKey[1]]);
+        } else {
+          console.log('Document not found');
+          setValue('')
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     setValue(e.target.value);

@@ -8,11 +8,35 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { db } from "../utility/firebase";
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 function SingleSelect({ label, options, values, dbUpdate ,dbKey }) {
   const theme = useTheme();
   const [selected, setSelected] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // replace 'test' with user id
+        const userDocRef = doc(db, "users", 'test');
+        const doc2 = await getDoc(userDocRef);
+        if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
+          setSelected(doc2.data()[dbKey[0]][dbKey[1]]);
+        } else {
+          console.log('Document not found');
+          setSelected('');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (value) => {
     setSelected(value);

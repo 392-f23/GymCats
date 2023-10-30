@@ -56,6 +56,12 @@ const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
             label={"Gender"}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "Gender"]}
+            options={[
+              "Male",
+              "Female",
+              "Nonbinary",
+              "Other"
+            ]}
           />
           <TextInput
             label={"Age"}
