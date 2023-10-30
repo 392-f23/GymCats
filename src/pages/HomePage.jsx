@@ -5,10 +5,13 @@ import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import { dummyMatches } from "../assets/dummydata";
+import Navbar from "../components/Navbar";
+import {computeMatchesBasedOnEncoding} from "../utility/knn"; 
+
 function HomePage() {
   const theme = useTheme();
   const [matches, setMatches] = useState(dummyMatches);
-
+  const [selected, setSelected] = useState('home')
   const handleNotInterested = (id) => {
     console.log("called")
     setMatches(matches.filter(match => match.personal_info.id !== id))
@@ -58,6 +61,7 @@ function HomePage() {
           ))}
         </Box>
       </Container>
+      <Navbar selected={selected} setSelected={setSelected}/>
     </Box>
   );
 }

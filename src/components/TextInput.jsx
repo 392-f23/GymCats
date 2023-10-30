@@ -13,8 +13,8 @@ function TextInput({ label, dbUpdate, dbKey }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // replace 'test' with user id
-        const userDocRef = doc(db, "users", 'test');
+        const uid = localStorage.getItem('uid');
+        const userDocRef = doc(db, "users", uid);
         const doc2 = await getDoc(userDocRef);
         if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
           setValue(doc2.data()[dbKey[0]][dbKey[1]]);

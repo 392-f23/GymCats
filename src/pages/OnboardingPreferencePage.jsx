@@ -15,11 +15,11 @@ const OnboardingPreferencePage = ({
   const theme = useTheme();
 
   const GoBack = () => {
+    submitFormInformation(dbState);
     previousStep();
   };
 
   const Continue = () => {
-    //TODO fix submit form information
     submitFormInformation(dbState);
     nextStep();
   };

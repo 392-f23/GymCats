@@ -16,6 +16,25 @@ function MultiSelect({
 }) {
   const [selectedList, setSelectedList] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const uid = localStorage.getItem('uid');
+        const userDocRef = doc(db, "users", uid);
+        const doc2 = await getDoc(userDocRef);
+        if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
+          setSelectedList(doc2.data()[dbKey[0]][dbKey[1]]);
+        } else {
+          console.log('Document not found');
+          setSelectedList([]);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleToggle = (event, newSelectedList) => {
     setSelectedList(newSelectedList);
 

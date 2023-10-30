@@ -22,8 +22,8 @@ const firebaseConfig = {
   projectId: "gymbuddy-e9e14",
   storageBucket: "gymbuddy-e9e14.appspot.com",
   messagingSenderId: "930913179368",
-  appId: "1:930913179368:web:76edd7769ae673bef05b5d",
-  measurementId: "G-K3JSSHGDW7",
+  appId: "1:930913179368:web:3487a1bc32808655f05b5d",
+  measurementId: "G-ZW2TNBKVSZ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -113,16 +113,8 @@ const signUpWithGoogle = async (navigate) => {
           photoURL: user.photoURL,
           onboarded: false,
         };
-
         await setDoc(userDocRef, userData, { merge: true });
-
-        const { displayName, photoURL, uid } = user;
-
-        localStorage.setItem("isSignedIn", true);
-        localStorage.setItem("name", displayName);
-        localStorage.setItem("photoUrl", photoURL);
-        localStorage.setItem("uid", uid);
-        navigate(0);
+        signInWithGoogle(user, navigate);
       }
     })
     .catch((error) => {
@@ -163,108 +155,11 @@ const isOnboarded = async () => {
 };
 
 const submitFormInformation = async (dbState) => {
-  // const id = localStorage.getItem("uid");
-  const id = "test";
-  const userDocRef = doc(db, "users", id);
-  await setDoc(userDocRef, dbState, { merge: true });
+  const uid = localStorage.getItem("uid");
+  await setDoc(doc(db, "users", uid, "PersonalData"), dbState.PersonalData, { merge: true });
+  await setDoc(doc(db, "users", uid, "PartnerPreferences"), dbState.PartnerPreferences, { merge: true });
   await updateDoc(userDocRef, dbState);
 };
-
-export const addExpense = async (newSpending) => {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-
-  const docSnap = await getDoc(userDocRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const { expenses, SpendingHistory } = data;
-    const { category, subcategory, amount } = newSpending;
-
-    if (category in expenses) {
-      const { subExpense, total } = expenses[category];
-
-      if (subcategory in subExpense) {
-        const value = subExpense[subcategory] + amount;
-        const newSubExpense = {
-          ...subExpense,
-          [subcategory]: value,
-        };
-
-        const newExpense = {
-          ...expenses,
-          [category]: {
-            subExpense: newSubExpense,
-            total: total + amount,
-          },
-        };
-
-        await updateDoc(userDocRef, {
-          expenses: newExpense,
-        });
-      }
-    }
-
-    SpendingHistory.push(newSpending);
-
-    await updateDoc(userDocRef, {
-      SpendingHistory: SpendingHistory,
-    });
-  }
-};
-
-export async function changeIncome(income) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  await updateDoc(userDocRef, {
-    income: income,
-  });
-}
-
-export async function changeBudget(budget) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  await updateDoc(userDocRef, {
-    budget: budget,
-  });
-}
-
-export async function updateData(obj) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  await updateDoc(userDocRef, {
-    expenses: obj,
-  });
-}
-
-export async function changeBudgetByCategory(category, budget) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  const docSnap = await getDoc(userDocRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const { budgetByCategory } = data;
-
-    const newBudgetByCategory = {
-      ...budgetByCategory,
-      [category]: budget,
-    };
-
-    await updateDoc(userDocRef, {
-      budgetByCategory: newBudgetByCategory,
-    });
-
-    const newTotal = Object.entries(newBudgetByCategory).reduce(
-      (sum, [_, value]) => sum + value,
-      0
-    );
-
-    await updateDoc(userDocRef, {
-      budget: newTotal,
-    });
-  }
-}
 
 export {
   db,

@@ -8,18 +8,24 @@ import { StyledDivider } from "../components/StyledDivider";
 import { handleLogOut } from "../utility/firebase";
 import { useNavigate } from "react-router-dom";
 
-const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
+const OnboardingPersonalPage = ({ 
+  updateDB, 
+  previousStep, 
+  nextStep, 
+  dbState 
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
   const GoBack = () => {
+    submitFormInformation(dbState);
     // todo: make user sign out
     handleLogOut(navigate);
     // previousStep();
   };
 
   const Continue = () => {
-    // update DB
+    submitFormInformation(dbState);
     nextStep();
   };
 
