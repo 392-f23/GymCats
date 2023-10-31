@@ -44,16 +44,22 @@ const ProfilePage = () => {
         }}
       >
         <Box>
-          <Box>
+          <Box sx={{ marginBottom: "30px" }}>
             <Typography variant="h3">Personal</Typography>
-            <Box sx={{ cursor: "pointer" }}>
+            <Box
+              sx={{ cursor: "pointer" }}
+              onClick={() => navigate("/profile/edit/personal")}
+            >
               <Typography variant="h5">Edit Personal Detail</Typography>
             </Box>
           </Box>
           <StyledDivider />
           <Box>
             <Typography variant="h3">Preference</Typography>
-            <Box sx={{ cursor: "pointer" }}>
+            <Box
+              sx={{ cursor: "pointer" }}
+              onClick={() => navigate("/profile/edit/preference")}
+            >
               <Typography variant="h5">Edit Preference Detail</Typography>
             </Box>
           </Box>
@@ -63,10 +69,10 @@ const ProfilePage = () => {
             variant="contained"
             sx={{
               borderRadius: "40px",
-              backgroundColor: theme.palette.primary[2],
-              color: theme.palette.text.secondary,
+              backgroundColor: theme.palette.primary["warning"],
+              color: theme.palette.text.primary,
               "&:hover": {
-                backgroundColor: theme.palette.primary[4],
+                backgroundColor: theme.palette.primary["warning"],
               },
             }}
           >

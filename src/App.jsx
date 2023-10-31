@@ -12,11 +12,15 @@ import {
 import LoadingContainer from "./components/LoadingContainer";
 import "./App.css";
 import ProfilePage from "./pages/ProfilePage";
+import EditPersonalPage from "./pages/EditPersonalPage";
+import EditPreferencePage from "./pages/EditPreferencePage";
 
 const privateRoutes = [
   { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
   { path: "/profile", component: () => <ProfilePage /> },
+  { path: "/profile/edit/personal", component: () => <EditPersonalPage /> },
+  { path: "/profile/edit/preference", component: () => <EditPreferencePage /> },
 ];
 
 const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
