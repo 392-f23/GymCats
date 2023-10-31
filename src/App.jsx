@@ -11,10 +11,12 @@ import {
 } from "./utility/firebase";
 import LoadingContainer from "./components/LoadingContainer";
 import "./App.css";
+import ProfilePage from "./pages/ProfilePage";
 
 const privateRoutes = [
   { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
+  { path: "/profile", component: () => <ProfilePage /> },
 ];
 
 const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
