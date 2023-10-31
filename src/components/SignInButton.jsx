@@ -14,12 +14,12 @@ const SignInButton = () => {
       startIcon={<GoogleIcon sx={{ width: "40px", height: "40px" }} />}
       sx={{
         marginTop: "50px",
-        width: "360px",
-        height: "80px",
+        width: "90%",
+        height: "60px",
         color: "#ffffff",
         fontWeight: "bolder",
         borderRadius: "30px",
-        fontSize: "1.4rem",
+        fontSize: "1rem",
       }}
     >
       Sign In With Google
