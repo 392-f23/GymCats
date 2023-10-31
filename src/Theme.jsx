@@ -20,6 +20,8 @@ export const theme = createTheme({
             2: "#5197E9",
             3: "#2353B1",
             4: "#3F86D7",
+            5:"#D84B57",
+            6: "#C13742",
         }
     },
     breakpoints: {
