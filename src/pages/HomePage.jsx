@@ -60,19 +60,17 @@ function HomePage() {
             mt: 2,
           }}
         >
-          {matches.map((match) => (
+          {matches.map((match, index) => (
             <PersonCard
+              key={index}
               person={match}
               photoURL={photoUrl}
               handleInterested={handleInterested}
               handleNotInterested={handleNotInterested}
             />
           ))}
-          {matches.map((match) => (
-            <FriendCard
-              person={match}
-              photoURL={photoUrl}
-            />
+          {matches.map((match, index) => (
+            <FriendCard key={index} person={match} photoURL={photoUrl} />
           ))}
         </Box>
       </Container>
