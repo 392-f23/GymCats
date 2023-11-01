@@ -3,9 +3,11 @@ import React from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import { useNavigate } from "react-router-dom";
 
 function Navbar({ selected, setSelected }) {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -65,7 +67,10 @@ function Navbar({ selected, setSelected }) {
                 : theme.palette.primary[3],
           },
         }}
-        onClick={() => setSelected("home")}
+        onClick={() => {
+          setSelected("home");
+          navigate("/home");
+        }}
       >
         <HomeOutlinedIcon
           sx={{
@@ -92,7 +97,10 @@ function Navbar({ selected, setSelected }) {
                 : theme.palette.primary[3],
           },
         }}
-        onClick={() => setSelected("profile")}
+        onClick={() => {
+          setSelected("profile");
+          navigate("/profile");
+        }}
       >
         <PersonOutlineOutlinedIcon
           sx={{

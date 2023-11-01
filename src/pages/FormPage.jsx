@@ -15,28 +15,26 @@ function FormPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const uid = localStorage.getItem("uid")
+        const uid = localStorage.getItem("uid");
         const userDocRef = doc(db, "users", uid);
         const userDoc = await getDoc(userDocRef);
+
         if (userDoc.exists) {
           const data = userDoc.data();
+
           setDBState({
-            PersonalData: data.PersonalData || {},
-            PartnerPreferences: data.PartnerPreferences || {},
+            PersonalData: data?.PersonalData || {},
+            PartnerPreferences: data?.PartnerPreferences || {},
           });
         } else {
-          console.log('Document not found');
+          console.log("Document not found");
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log(dbState)
-  }, [dbState]);
 
   const previousStep = () => {
     setStep(step - 1);

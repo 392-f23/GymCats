@@ -9,17 +9,17 @@ import { handleLogOut } from "../utility/firebase";
 import { useNavigate } from "react-router-dom";
 import submitFormInformation from "../utility/firebase";
 
-const OnboardingPersonalPage = ({ 
-  updateDB, 
-  previousStep, 
-  nextStep, 
-  dbState 
+const OnboardingPersonalPage = ({
+  updateDB,
+  previousStep,
+  nextStep,
+  dbState,
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
   const GoBack = async () => {
-    console.log(dbState)
+    console.log(dbState);
     await submitFormInformation(dbState);
     // todo: make user sign out
     handleLogOut(navigate);
@@ -61,21 +61,10 @@ const OnboardingPersonalPage = ({
           </Typography>
           <MultiSelect
             label={"Gender"}
-            options={[
-              "Male",
-              "Female",
-              "Nonbinary",
-              "Other"
-            ]}
-            values={[
-              "male",
-              "female",
-              "nonbinary",
-              "other"
-            ]}
-            dbState={dbState}
             dbUpdate={updateDB}
+            dbState={dbState}
             dbKey={["PersonalData", "Gender"]}
+            options={["Male", "Female", "Nonbinary", "Other"]}
           />
           <TextInput
             label={"Age"}
@@ -138,7 +127,7 @@ const OnboardingPersonalPage = ({
         </Box>
       </Container>
     </Box>
-  )
+  );
 };
 
 export default OnboardingPersonalPage;

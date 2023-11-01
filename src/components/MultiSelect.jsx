@@ -7,25 +7,19 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 
-function MultiSelect({
-  label,
-  options,
-  values,
-  dbState,
-  dbUpdate,
-  dbKey
-}) {
+function MultiSelect({ label, options, values, dbState, dbUpdate, dbKey }) {
   const [selectedList, setSelectedList] = useState([]);
-  const [firstKey, secondKey] = dbKey
+  const [firstKey, secondKey] = dbKey;
 
   useEffect(() => {
     if (dbState[firstKey][secondKey]) {
-      setSelectedList(dbState[firstKey][secondKey])
+      setSelectedList(dbState[firstKey][secondKey]);
     }
   }, [dbState]);
 
   const handleToggle = (event, newSelectedList) => {
     setSelectedList(newSelectedList);
+
     dbUpdate((prevState) => {
       prevState[firstKey][secondKey] = newSelectedList;
       return prevState;
@@ -87,7 +81,8 @@ function MultiSelect({
         {options.map((option) => (
           <StyledToggleButton
             key={option}
-            value={values[options.indexOf(option)]}
+            // value={values[options.indexOf(option)]}
+            value={option}
             sx={{ mr: 2, mb: 2 }}
           >
             {option}
