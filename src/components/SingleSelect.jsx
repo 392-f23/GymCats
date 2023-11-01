@@ -9,41 +9,30 @@ import {
   useTheme,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { db } from "../utility/firebase";
-import {
-  doc,
-  getDoc,
-} from "firebase/firestore";
 
-function SingleSelect({ label, options, values, dbUpdate ,dbKey }) {
+function SingleSelect({
+  label,
+  options,
+  values,
+  dbState,
+  dbUpdate,
+  dbKey
+}) {
   const theme = useTheme();
   const [selected, setSelected] = useState("");
+  const [firstKey, secondKey] = dbKey
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const uid = localStorage.getItem('uid');
-        const userDocRef = doc(db, "users", uid);
-        const doc2 = await getDoc(userDocRef);
-        if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
-          setSelected(doc2.data()[dbKey[0]][dbKey[1]]);
-        } else {
-          console.log('Document not found');
-          setSelected('');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (dbState[firstKey][secondKey]) {
+      setSelected(dbState[firstKey][secondKey])
+    }
+  }, [dbState]);
 
-  const handleChange = (value) => {
-    setSelected(value);
+  const handleChange = (newSelected) => {
+    setSelected(newSelected);
     dbUpdate(prevState => {
-      prevState[dbKey[0]][dbKey[1]] = value
-      // console.log(prevState)
-      return prevState                                 
+      prevState[firstKey][secondKey] = newSelected
+      return prevState
     })
   };
 

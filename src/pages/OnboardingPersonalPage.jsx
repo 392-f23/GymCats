@@ -7,6 +7,7 @@ import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import { handleLogOut } from "../utility/firebase";
 import { useNavigate } from "react-router-dom";
+import submitFormInformation from "../utility/firebase";
 
 const OnboardingPersonalPage = ({ 
   updateDB, 
@@ -17,15 +18,15 @@ const OnboardingPersonalPage = ({
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const GoBack = () => {
-    submitFormInformation(dbState);
+  const GoBack = async () => {
+    console.log(dbState)
+    await submitFormInformation(dbState);
     // todo: make user sign out
     handleLogOut(navigate);
     // previousStep();
   };
 
   const Continue = () => {
-    submitFormInformation(dbState);
     nextStep();
   };
 
@@ -60,17 +61,25 @@ const OnboardingPersonalPage = ({
           </Typography>
           <MultiSelect
             label={"Gender"}
-            dbUpdate={updateDB}
-            dbKey={["PersonalData", "Gender"]}
             options={[
               "Male",
               "Female",
               "Nonbinary",
               "Other"
             ]}
+            values={[
+              "male",
+              "female",
+              "nonbinary",
+              "other"
+            ]}
+            dbState={dbState}
+            dbUpdate={updateDB}
+            dbKey={["PersonalData", "Gender"]}
           />
           <TextInput
             label={"Age"}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "Age"]}
           />
@@ -83,6 +92,7 @@ const OnboardingPersonalPage = ({
               "Expert (5+ years)",
             ]}
             values={["beginner", "intermediate", "advanced", "expert"]}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "ExperienceLevel"]}
           />

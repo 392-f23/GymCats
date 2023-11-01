@@ -1,15 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OnboardingPersonalPage from "./OnboardingPersonalPage";
 import OnboardingPreferencePage from "./OnboardingPreferencePage";
 import HomePage from "./HomePage";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../utility/firebase";
 
 function FormPage() {
   const [step, setStep] = useState(1);
-  //db state to push to firebase
   const [dbState, setDBState] = useState({
     PersonalData: {},
     PartnerPreferences: {},
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const uid = localStorage.getItem("uid")
+        const userDocRef = doc(db, "users", uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists) {
+          const data = userDoc.data();
+          setDBState({
+            PersonalData: data.PersonalData || {},
+            PartnerPreferences: data.PartnerPreferences || {},
+          });
+        } else {
+          console.log('Document not found');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(dbState)
+  }, [dbState]);
 
   const previousStep = () => {
     setStep(step - 1);
@@ -31,6 +58,7 @@ function FormPage() {
           updateDB={setDBState}
           previousStep={previousStep}
           nextStep={nextStep}
+          dbState={dbState}
         />
       );
       break;

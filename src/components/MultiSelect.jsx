@@ -5,42 +5,29 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 function MultiSelect({
   label,
-  dbUpdate,
-  dbKey,
-  showNoPreference = false,
   options,
+  values,
+  dbState,
+  dbUpdate,
+  dbKey
 }) {
   const [selectedList, setSelectedList] = useState([]);
+  const [firstKey, secondKey] = dbKey
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const uid = localStorage.getItem('uid');
-        const userDocRef = doc(db, "users", uid);
-        const doc2 = await getDoc(userDocRef);
-        if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
-          setSelectedList(doc2.data()[dbKey[0]][dbKey[1]]);
-        } else {
-          console.log('Document not found');
-          setSelectedList([]);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (dbState[firstKey][secondKey]) {
+      setSelectedList(dbState[firstKey][secondKey])
+    }
+  }, [dbState]);
 
   const handleToggle = (event, newSelectedList) => {
     setSelectedList(newSelectedList);
-
-    // db update
     dbUpdate((prevState) => {
-      prevState[dbKey[0]][dbKey[1]] = newSelectedList;
+      prevState[firstKey][secondKey] = newSelectedList;
       return prevState;
     });
   };
@@ -98,15 +85,14 @@ function MultiSelect({
         }}
       >
         {options.map((option) => (
-          <StyledToggleButton key={option} value={option} sx={{ mr: 2, mb: 2 }}>
+          <StyledToggleButton
+            key={option}
+            value={values[options.indexOf(option)]}
+            sx={{ mr: 2, mb: 2 }}
+          >
             {option}
           </StyledToggleButton>
         ))}
-        {showNoPreference && (
-          <StyledToggleButton label={"No Preference"} value={"No Preference"}>
-            No Preference
-          </StyledToggleButton>
-        )}
       </ToggleButtonGroup>
     </Box>
   );

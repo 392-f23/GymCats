@@ -62,11 +62,7 @@ const handleLogin = async (navigate) => {
         // The email is associated with an existing account
         // Redirect to home page or perform the sign-in logic as needed
         const { user } = result;
-        const { displayName, photoURL, uid } = user;
-        localStorage.setItem("isSignedIn", true);
-        localStorage.setItem("name", displayName);
-        localStorage.setItem("photoUrl", photoURL);
-        localStirage.setItem("uid", uid);
+        signInWithGoogle(user, navigate)
         navigate("/home");
       }
     })
@@ -86,6 +82,9 @@ const handleLogOut = (navigate) => {
   localStorage.removeItem("name");
   localStorage.removeItem("photoUrl");
   localStorage.removeItem("uid");
+
+  localStorage.removeItem("PersonalData")
+  localStorage.removeItem("PartnerPreferences")
   navigate(0);
 };
 
@@ -112,6 +111,8 @@ const signUpWithGoogle = async (navigate) => {
           displayName: user.displayName,
           photoURL: user.photoURL,
           onboarded: false,
+          PersonalData: {},
+          PartnerPreferences: {},
         };
         await setDoc(userDocRef, userData, { merge: true });
         signInWithGoogle(user, navigate);
@@ -122,12 +123,18 @@ const signUpWithGoogle = async (navigate) => {
     });
 };
 
-const signInWithGoogle = (user, navigate) => {
+const signInWithGoogle = async (user, navigate) => {
   const { displayName, photoURL, uid } = user;
   localStorage.setItem("isSignedIn", true);
   localStorage.setItem("name", displayName);
   localStorage.setItem("photoUrl", photoURL);
   localStorage.setItem("uid", uid);
+
+  const userDocRef = doc(db, "users", uid);
+  const userDoc = await getDoc(userDocRef);
+  const data = userDoc.data()
+  localStorage.setItem("PersonalData", JSON.stringify(data.PersonalData))
+  localStorage.setItem("PartnerPreferences", JSON.stringify(data.PartnerPreferences))
   navigate(0);
 };
 
@@ -156,8 +163,8 @@ const isOnboarded = async () => {
 
 const submitFormInformation = async (dbState) => {
   const uid = localStorage.getItem("uid");
-  await setDoc(doc(db, "users", uid, "PersonalData"), dbState.PersonalData, { merge: true });
-  await setDoc(doc(db, "users", uid, "PartnerPreferences"), dbState.PartnerPreferences, { merge: true });
+  const userDocRef = doc(db, "users", uid)
+  await setDoc(userDocRef, dbState, { merge: true });
   await updateDoc(userDocRef, dbState);
 };
 
