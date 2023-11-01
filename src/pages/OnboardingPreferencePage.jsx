@@ -55,20 +55,8 @@ const OnboardingPreferencePage = ({
           </Typography>
           <MultiSelect
             label={"Gender"}
-            options={[
-              "Male",
-              "Female",
-              "Nonbinary",
-              "Other",
-              "No Preference"
-            ]}
-            values={[
-              "male",
-              "female",
-              "nonbinary",
-              "other",
-              "no preference"
-            ]}
+            options={["Male", "Female", "Nonbinary", "Other", "No Preference"]}
+            values={["male", "female", "nonbinary", "other", "no preference"]}
             dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PartnerPreferences", "Gender"]}

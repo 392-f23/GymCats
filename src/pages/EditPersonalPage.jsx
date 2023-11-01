@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, useTheme, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
@@ -9,6 +10,10 @@ import Container from "../components/Container";
 const EditPersonalPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [dbState, setDBState] = useState({
+    PersonalData: {},
+    PartnerPreferences: {},
+  });
 
   return (
     <Box sx={{ backgroundColor: theme.palette.primary[1], minHeight: "100%" }}>
@@ -16,13 +21,15 @@ const EditPersonalPage = () => {
       <Container>
         <MultiSelect
           label={"Gender"}
-          dbUpdate={null}
+          dbUpdate={setDBState}
+          dbState={dbState}
           dbKey={["PersonalData", "Gender"]}
           options={["Male", "Female", "Nonbinary", "Other"]}
         />
         <TextInput
           label={"Age"}
-          dbUpdate={null}
+          dbUpdate={setDBState}
+          dbState={dbState}
           dbKey={["PersonalData", "Age"]}
         />
         <SingleSelect
@@ -34,7 +41,8 @@ const EditPersonalPage = () => {
             "Expert (5+ years)",
           ]}
           values={["beginner", "intermediate", "advanced", "expert"]}
-          dbUpdate={null}
+          dbUpdate={setDBState}
+          dbState={dbState}
           dbKey={["PersonalData", "ExperienceLevel"]}
         />
         <Box

@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Button, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { StyledDivider } from "../components/StyledDivider";
 import ProfileHeader from "../components/ProfileHeader";
+import Navbar from "../components/Navbar";
 
 const ProfilePage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [selected, setSelected] = useState("profile");
 
   return (
     <Box sx={{ backgroundColor: theme.palette.primary[1], height: "100%" }}>
@@ -57,6 +59,7 @@ const ProfilePage = () => {
           </Button>
         </Box>
       </Box>
+      <Navbar selected={selected} setSelected={setSelected} />
     </Box>
   );
 };

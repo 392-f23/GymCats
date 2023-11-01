@@ -62,6 +62,7 @@ const OnboardingPersonalPage = ({
           <MultiSelect
             label={"Gender"}
             dbUpdate={updateDB}
+            dbState={dbState}
             dbKey={["PersonalData", "Gender"]}
             options={["Male", "Female", "Nonbinary", "Other"]}
           />
