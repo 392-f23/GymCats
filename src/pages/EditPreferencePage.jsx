@@ -10,7 +10,7 @@ const EditPreferencePage = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.primary[1], height: "100%" }}>
+    <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
       <ProfileHeader />
       <Container>
         <MultiSelect
@@ -70,6 +70,7 @@ const EditPreferencePage = () => {
                 backgroundColor: theme.palette.primary["warning"],
               },
             }}
+            onClick={() => navigate("/profile")}
           >
             Discard
           </Button>

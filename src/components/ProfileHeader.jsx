@@ -8,25 +8,32 @@ const ProfileHeader = () => {
     <Box
       sx={{
         backgroundColor: theme.palette.primary[2],
-        height: "150px",
+        height: "130px",
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
         alignItems: "center",
+        justifyContent: "center",
+        borderBottomLeftRadius: "50px",
+        borderBottomRightRadius: "50px",
       }}
     >
-      <Box sx={{ display: "flex" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Box
           component="img"
           src={photoUrl}
           sx={{
-            width: "50px",
-            height: "50px",
+            width: "40px",
+            height: "40px",
             borderRadius: "50%",
-            marginRight: "30px",
+            marginRight: "10px",
           }}
         />
-        <Typography variant="h1">Welcome Back, David!</Typography>
+        <Typography variant="h5">Welcome Back, David!</Typography>
       </Box>
     </Box>
   );
