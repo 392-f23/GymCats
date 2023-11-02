@@ -6,14 +6,16 @@ import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import TextInput from "../components/TextInput";
 import Container from "../components/Container";
-
+import {submitFormInformation, fetchUserData} from "../utility/firebase";
+ 
 const EditPersonalPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [dbState, setDBState] = useState({
-    PersonalData: {},
-    PartnerPreferences: {},
+    PersonalData: {}
   });
+  console.log("Edit personal page: ")
+  console.log(dbState); 
 
   return (
     <Box sx={{ backgroundColor: theme.palette.primary[1], minHeight: "100%" }}>
@@ -49,7 +51,7 @@ const EditPersonalPage = () => {
           label={"Gym Preference"}
           dbUpdate={setDBState}
           dbState={dbState}
-          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          dbKey={["PersonalData", "GymPreference"]}
           options={["SPAC", "Blomquist"]}
         />
           <MultiSelect
@@ -83,6 +85,10 @@ const EditPersonalPage = () => {
               "&:hover": {
                 backgroundColor: theme.palette.primary["main"],
               },
+            }}
+            onClick = {() => {
+              submitFormInformation(dbState);
+              navigate("/profile"); 
             }}
           >
             Save

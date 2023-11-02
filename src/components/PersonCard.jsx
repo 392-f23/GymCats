@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import CloseIcon from "@mui/icons-material/Close";
 
 function PersonCard({
   person,
@@ -18,6 +19,8 @@ function PersonCard({
   handleNotInterested,
   showInterestedButtons = true,
   showRemoveButton = false,
+  showExpandedIconButton = true,
+  handleClose,
   handleRemoveFriend, // todo: needs to be implemented
 }) {
   const info = person.personal_info;
@@ -35,7 +38,7 @@ function PersonCard({
 
   const theme = useTheme();
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!showExpandedIconButton);
 
   return (
     <Card
@@ -92,25 +95,43 @@ function PersonCard({
               {school} | {major}
             </Typography>
           </Box>
-          <IconButton
-            sx={{
-              ml: 2,
-              mr: 2,
-              backgroundColor: theme.palette.primary.main,
-              filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
-              transition: "0.2s",
-              "&:hover": {
-                backgroundColor: theme.palette.primary[3],
-              },
-            }}
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? (
-              <ExpandLessIcon sx={{ color: theme.palette.text.primary }} />
-            ) : (
-              <ExpandMoreIcon sx={{ color: theme.palette.text.primary }} />
-            )}
-          </IconButton>
+          {showExpandedIconButton ? (
+            <IconButton
+              sx={{
+                ml: 2,
+                mr: 2,
+                backgroundColor: theme.palette.primary.main,
+                filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                transition: "0.2s",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary[3],
+                },
+              }}
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? (
+                <ExpandLessIcon sx={{ color: theme.palette.text.primary }} />
+              ) : (
+                <ExpandMoreIcon sx={{ color: theme.palette.text.primary }} />
+              )}
+            </IconButton>
+          ) : (
+            <IconButton
+              sx={{
+                ml: 2,
+                mr: 2,
+                backgroundColor: theme.palette.primary.main,
+                filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                transition: "0.2s",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary[3],
+                },
+              }}
+              onClick={handleClose}
+            >
+              <CloseIcon sx={{ color: theme.palette.text.primary }} />
+            </IconButton>
+          )}
         </Box>
         <Box
           sx={{

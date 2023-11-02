@@ -174,6 +174,18 @@ const updatePersonalInfo = async (dbState) => {
     await setDoc(userDocRef, )
 }*/
 
+const fetchUserData = async (uid) => {
+  const userRef = doc(db, "users", uid);
+  const snapshot = await getDoc(userRef);
+  console.log(snapshot.data())
+  if (snapshot.exists()) {
+    const data = await snapshot.data();
+    return data;
+  }
+
+  return null;
+};
+
 export {
   db,
   auth,
@@ -187,6 +199,7 @@ export {
   checkIfLoggedIn,
   isOnboarded,
   submitFormInformation,
+  fetchUserData,
 };
 
 export default submitFormInformation;

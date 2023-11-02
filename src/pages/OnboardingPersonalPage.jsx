@@ -21,9 +21,8 @@ const OnboardingPersonalPage = ({
   const GoBack = async () => {
     console.log(dbState);
     await submitFormInformation(dbState);
-    // todo: make user sign out
     handleLogOut(navigate);
-    // previousStep();
+    previousStep();
   };
 
   const Continue = () => {
@@ -84,6 +83,27 @@ const OnboardingPersonalPage = ({
             dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "ExperienceLevel"]}
+          />
+          <MultiSelect
+            label={"Gym Preference"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "GymPreference"]}
+            options={["SPAC", "Blomquist"]}
+          />
+          <MultiSelect
+            label={"Usual Workout Time"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "UsualWorkoutTime"]}
+            options={["Morning", "Afternoon", "Night"]}
+          />
+          <MultiSelect
+            label={"Goals"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "Goals"]}
+            options={["Powerlifting", "Bodybuilding", "Weightloss"]}
           />
         </Box>
         <Box

@@ -20,6 +20,7 @@ const OnboardingPreferencePage = ({
 
   const Continue = () => {
     submitFormInformation(dbState);
+    console.log(dbState)
     nextStep();
   };
 
@@ -81,6 +82,27 @@ const OnboardingPreferencePage = ({
             dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PartnerPreferences", "ExperienceLevel"]}
+          />
+          <MultiSelect
+            label={"Gym Preference"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PartnerPreferences", "GymPreference"]}
+            options={["SPAC", "Blomquist"]}
+          />
+          <MultiSelect
+            label={"Usual Workout Time"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PartnerPreferences", "UsualWorkoutTime"]}
+            options={["Morning", "Afternoon", "Night"]}
+          />
+          <MultiSelect
+            label={"Goals"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PartnerPreferences", "Goals"]}
+            options={["Powerlifting", "Bodybuilding", "Weightloss"]}
           />
         </Box>
         <Box

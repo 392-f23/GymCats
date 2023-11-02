@@ -40,6 +40,11 @@ export const theme = createTheme({
       fontSize: "1.2rem",
       fontWeight: 600,
     },
+    h6: {
+      fontFamily: "Kanit",
+      fontSize: "1rem",
+      fontWeight: 600,
+    },
     body1: {
       fontFamily: "Oxygen",
       fontSize: "1.5rem",
@@ -52,6 +57,11 @@ export const theme = createTheme({
     },
     button: {
       textTransform: "none",
+      fontFamily: "Oxygen",
+      fontSize: "1rem",
+      fontWeight: 400,
+    },
+    a: {
       fontFamily: "Oxygen",
       fontSize: "1rem",
       fontWeight: 400,

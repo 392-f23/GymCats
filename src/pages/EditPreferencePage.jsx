@@ -5,13 +5,15 @@ import ProfileHeader from "../components/ProfileHeader";
 import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import Container from "../components/Container";
+import {submitFormInformation, fetchUserData} from "../utility/firebase"; 
 
 const EditPreferencePage = () => {
+  // const uid = localStorage.getItem("uid");
+  // const userData = fetchUserData(uid)
   const theme = useTheme();
   const navigate = useNavigate();
   const [dbState, setDBState] = useState({
-    PersonalData: {},
-    PartnerPreferences: {},
+    PartnerPreferences:  {} //userData.PartnerPreferences
   });
   console.log(`dbState in EditPreferencePage: \n`)
   console.log(dbState); 
@@ -55,21 +57,21 @@ const EditPreferencePage = () => {
           label={"Gym Preference"}
           dbUpdate={setDBState}
           dbState={dbState}
-          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          dbKey={["PartnerPreferences", "GymPreference"]}
           options={["SPAC", "Blomquist"]}
         />
           <MultiSelect
           label={"Usual Workout Time"}
           dbUpdate={setDBState}
           dbState={dbState}
-          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          dbKey={["PartnerPreferences", "UsualWorkoutTime"]}
           options={["Morning", "Afternoon", "Night"]}
         />
           <MultiSelect
           label={"Goals"}
           dbUpdate={setDBState}
           dbState={dbState}
-          dbKey={["PersonalData", "Goals"]}
+          dbKey={["PartnerPreferences", "Goals"]}
           options={["Powerlifting", "Bodybuilding", "Weightloss"]}
         />
         <Box
@@ -90,6 +92,10 @@ const EditPreferencePage = () => {
                 backgroundColor: theme.palette.primary["main"],
               },
             }}
+            onClick={() => {
+              submitFormInformation(dbState);
+              navigate("/profile"); 
+            } }
           >
             Save
           </Button>
@@ -103,7 +109,9 @@ const EditPreferencePage = () => {
                 backgroundColor: theme.palette.primary["warning"],
               },
             }}
-            onClick={() => navigate("/profile")}
+            onClick={() => {
+              navigate("/profile")}
+            }
           >
             Discard
           </Button>

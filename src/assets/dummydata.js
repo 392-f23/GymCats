@@ -12,6 +12,7 @@ export const dummyMatches = [
       Workout_Frequency: 3,
       Gender: "Male",
       Name: "Ronnie Coleman",
+      Email: "ronniecoleman@gmail.com",
     },
   },
   {
@@ -27,6 +28,7 @@ export const dummyMatches = [
       Workout_Frequency: 3,
       Gender: "Male",
       Name: "Chris Bumstead",
+      Email: "chrisbumstead@gmail.com",
     },
   },
   {
@@ -42,6 +44,7 @@ export const dummyMatches = [
       Workout_Frequency: 5,
       Gender: "Male",
       Name: "Brandon Curry",
+      Email: "brandoncurry@gmail.com",
     },
   },
   {
@@ -57,6 +60,7 @@ export const dummyMatches = [
       Workout_Frequency: 2,
       Gender: "Male",
       Name: "Arnold Schwarzenegger",
+      Email: "arnoldscharzenegger@gmail.com",
     },
   },
   {
@@ -72,6 +76,7 @@ export const dummyMatches = [
       Workout_Frequency: 6,
       Gender: "Male",
       Name: "Regan Grimes",
+      Email: "regangrimes@gmail.com",
     },
   },
   {
@@ -87,6 +92,7 @@ export const dummyMatches = [
       Workout_Frequency: 3,
       Gender: "Male",
       Name: "Brad Pitt",
+      Email: "bradpitt@gmail.com",
     },
   },
   {
@@ -102,6 +108,7 @@ export const dummyMatches = [
       Workout_Frequency: 3,
       Gender: "Male",
       Name: "Samuel L. Jackson",
+      Email: "samuelljackson@gmail.com",
     },
   },
   {
@@ -117,6 +124,7 @@ export const dummyMatches = [
       Workout_Frequency: 5,
       Gender: "Male",
       Name: "Vin Diesel",
+      Email: "vindiesel@gmail.com",
     },
   },
   {
@@ -132,6 +140,7 @@ export const dummyMatches = [
       Workout_Frequency: 5,
       Gender: "Male",
       Name: "Chris Hemsworth",
+      Email: "chrishemsworth@gmail.com",
     },
   },
 ];
