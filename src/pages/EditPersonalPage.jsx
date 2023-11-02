@@ -45,6 +45,27 @@ const EditPersonalPage = () => {
           dbState={dbState}
           dbKey={["PersonalData", "ExperienceLevel"]}
         />
+        <MultiSelect
+          label={"Gym Preference"}
+          dbUpdate={setDBState}
+          dbState={dbState}
+          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          options={["SPAC", "Blomquist"]}
+        />
+          <MultiSelect
+          label={"Usual Workout Time"}
+          dbUpdate={setDBState}
+          dbState={dbState}
+          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          options={["Morning", "Afternoon", "Night"]}
+        />
+          <MultiSelect
+          label={"Goals"}
+          dbUpdate={setDBState}
+          dbState={dbState}
+          dbKey={["PersonalData", "Goals"]}
+          options={["Powerlifting", "Bodybuilding", "Weightloss"]}
+        />
         <Box
           sx={{
             display: "flex",

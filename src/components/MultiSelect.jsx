@@ -8,8 +8,11 @@ import {
 import { useState, useEffect } from "react";
 
 function MultiSelect({ label, options, values, dbState, dbUpdate, dbKey }) {
+  //array of values selected for given multiselect button group! 
   const [selectedList, setSelectedList] = useState([]);
   const [firstKey, secondKey] = dbKey;
+  console.log("selectedList state val: \n")
+  console.log(selectedList); 
 
   useEffect(() => {
     if (dbState[firstKey][secondKey]) {
@@ -18,12 +21,19 @@ function MultiSelect({ label, options, values, dbState, dbUpdate, dbKey }) {
   }, [dbState]);
 
   const handleToggle = (event, newSelectedList) => {
+    console.log(`in handleToggle fn: ${event.target.value}`); 
+    console.log("new Selected List: \n")
+    console.log(newSelectedList); 
     setSelectedList(newSelectedList);
 
     dbUpdate((prevState) => {
+      //const newState = {...prevState, firstKey: {secondKey: newSelectedList}}; 
       prevState[firstKey][secondKey] = newSelectedList;
-      return prevState;
-    });
+      console.log("dbUpdate called!")
+      console.log(`updated prevSTATE: \n`)
+      console.log(prevState); 
+      return prevState
+    }); 
   };
 
   const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({

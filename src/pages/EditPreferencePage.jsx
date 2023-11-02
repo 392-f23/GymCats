@@ -13,6 +13,9 @@ const EditPreferencePage = () => {
     PersonalData: {},
     PartnerPreferences: {},
   });
+  console.log(`dbState in EditPreferencePage: \n`)
+  console.log(dbState); 
+
 
   return (
     <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
@@ -46,6 +49,28 @@ const EditPreferencePage = () => {
           dbUpdate={setDBState}
           dbState={dbState}
           dbKey={["PartnerPreferences", "ExperienceLevel"]}
+        />
+       
+        <MultiSelect
+          label={"Gym Preference"}
+          dbUpdate={setDBState}
+          dbState={dbState}
+          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          options={["SPAC", "Blomquist"]}
+        />
+          <MultiSelect
+          label={"Usual Workout Time"}
+          dbUpdate={setDBState}
+          dbState={dbState}
+          dbKey={["PersonalData", "UsualWorkoutTime"]}
+          options={["Morning", "Afternoon", "Night"]}
+        />
+          <MultiSelect
+          label={"Goals"}
+          dbUpdate={setDBState}
+          dbState={dbState}
+          dbKey={["PersonalData", "Goals"]}
+          options={["Powerlifting", "Bodybuilding", "Weightloss"]}
         />
         <Box
           sx={{

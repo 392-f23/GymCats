@@ -41,7 +41,10 @@ function Navbar({ selected, setSelected }) {
                 : theme.palette.primary[3],
           },
         }}
-        onClick={() => setSelected("requests")}
+        onClick={() => 
+          {setSelected("requests");
+          navigate("/requests")}
+        }
       >
         <EmailOutlinedIcon
           sx={{

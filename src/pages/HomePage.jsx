@@ -7,7 +7,6 @@ import { StyledDivider } from "../components/StyledDivider";
 import { dummyMatches } from "../assets/dummydata";
 import Navbar from "../components/Navbar";
 import { computeMatchesBasedOnEncoding } from "../utility/knn";
-import FriendCard from "../components/FriendCard";
 
 function HomePage() {
   const theme = useTheme();
@@ -48,7 +47,6 @@ function HomePage() {
         ) : (
           <Typography variant="p">You have some new matches!</Typography>
         )}
-
         <Box
           sx={{
             width: "100%",
@@ -68,9 +66,6 @@ function HomePage() {
               handleInterested={handleInterested}
               handleNotInterested={handleNotInterested}
             />
-          ))}
-          {matches.map((match, index) => (
-            <FriendCard key={index} person={match} photoURL={photoUrl} />
           ))}
         </Box>
       </Container>

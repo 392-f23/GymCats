@@ -167,6 +167,12 @@ const submitFormInformation = async (dbState) => {
   await setDoc(userDocRef, dbState, { merge: true });
   await updateDoc(userDocRef, dbState);
 };
+/*
+const updatePersonalInfo = async (dbState) => {
+    const uid = localStorage.getItem("uid"); 
+    const userDocRef = doc(db, "users", uid); 
+    await setDoc(userDocRef, )
+}*/
 
 export {
   db,

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LoginPage from "./pages/LoginPage";
 import FormPage from "./pages/FormPage";
 import HomePage from "./pages/HomePage";
+import RequestsPage from "./pages/RequestsPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./Theme";
@@ -18,6 +19,7 @@ import EditPreferencePage from "./pages/EditPreferencePage";
 const privateRoutes = [
   { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
+  { path: "/requests", component: () => <RequestsPage /> },
   { path: "/profile", component: () => <ProfilePage /> },
   { path: "/profile/edit/personal", component: () => <EditPersonalPage /> },
   { path: "/profile/edit/preference", component: () => <EditPreferencePage /> },
