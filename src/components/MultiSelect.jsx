@@ -11,8 +11,6 @@ function MultiSelect({ label, options, values, dbState, dbUpdate, dbKey }) {
   //array of values selected for given multiselect button group! 
   const [selectedList, setSelectedList] = useState([]);
   const [firstKey, secondKey] = dbKey;
-  console.log("selectedList state val: \n")
-  console.log(selectedList); 
 
   useEffect(() => {
     if (dbState[firstKey][secondKey]) {

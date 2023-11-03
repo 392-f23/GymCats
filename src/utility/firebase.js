@@ -162,6 +162,7 @@ const isOnboarded = async () => {
 };
 
 const submitFormInformation = async (dbState) => {
+  console.log(dbState)
   const uid = localStorage.getItem("uid");
   const userDocRef = doc(db, "users", uid)
   await setDoc(userDocRef, dbState, { merge: true });
@@ -185,6 +186,19 @@ const fetchUserData = async (uid) => {
 
   return null;
 };
+
+export const fetchPersonalData = async () => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  const snapshot = await getDoc(userRef);
+  if (snapshot.exists()) {
+    
+    const data = snapshot.data();
+    return data;
+  }
+
+  return null;
+}
 
 export {
   db,
