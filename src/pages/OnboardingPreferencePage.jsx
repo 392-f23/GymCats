@@ -29,7 +29,7 @@ const OnboardingPreferencePage = ({
     });
 
     await submitFormInformation(formInformation);
-    navigate("/home");
+    navigate(0);
   };
 
   return (
