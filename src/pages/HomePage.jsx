@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import PersonCard from "../components/PersonCard";
 import Container from "../components/Container";
@@ -6,7 +6,11 @@ import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import { dummyMatches } from "../assets/dummydata";
 import Navbar from "../components/Navbar";
-import { addNotInterested, addInterested, getNotInterested } from "../utility/firebase";
+import {
+  addNotInterested,
+  addInterested,
+  getNotInterested,
+} from "../utility/firebase";
 
 function HomePage() {
   const theme = useTheme();

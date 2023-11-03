@@ -19,8 +19,13 @@ const OnboardingPreferencePage = ({
   };
 
   const Continue = () => {
-    submitFormInformation(dbState);
-    console.log(dbState)
+    const formInformation = Object.assign(dbState, {
+      Friends: [],
+      Requests: [],
+      NotInterested: [],
+    });
+
+    submitFormInformation(formInformation);
     nextStep();
   };
 
