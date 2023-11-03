@@ -5,6 +5,7 @@ import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
 import submitFormInformation from "../utility/firebase";
 import { StyledDivider } from "../components/StyledDivider";
+import { useNavigate } from "react-router-dom";
 
 const OnboardingPreferencePage = ({
   updateDB,
@@ -13,20 +14,22 @@ const OnboardingPreferencePage = ({
   dbState,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const GoBack = () => {
     previousStep();
   };
 
-  const Continue = () => {
+  const Continue = async () => {
     const formInformation = Object.assign(dbState, {
       Friends: [],
       Requests: [],
       NotInterested: [],
+      onboarded: true,
     });
 
-    submitFormInformation(formInformation);
-    nextStep();
+    await submitFormInformation(formInformation);
+    navigate("/home");
   };
 
   return (
