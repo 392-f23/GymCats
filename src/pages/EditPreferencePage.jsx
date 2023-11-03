@@ -19,13 +19,11 @@ const EditPreferencePage = () => {
   const [loading, setLoading] = useState(true);
   const getInitialData = async () => {
     const data = await fetchPersonalData();
-    console.log("data", data)
     setDBState(data);
     setLoading(false);
   };
   useEffect(() => {
     getInitialData();
-    console.log("dbstate", dbState)
   }, []);
 
 
