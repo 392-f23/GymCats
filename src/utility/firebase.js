@@ -6,6 +6,8 @@ import {
   setDoc,
   updateDoc,
   getDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -195,6 +197,39 @@ export const fetchPersonalData = async () => {
     
     const data = snapshot.data();
     return data;
+  }
+
+  return null;
+}
+
+export const addNotInterested = async (id) => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  await updateDoc(userRef, {
+    notInterested: arrayUnion(id),
+  });
+}
+
+export const addInterested = async (id) => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  await updateDoc(userRef, {
+    interested: arrayUnion(id),
+  });
+
+  const userRef2 = doc(db, "users", id);
+  await updateDoc(userRef2, {
+    requests: arrayUnion(uid),
+  });
+}
+
+export const getNotInterested = async () => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  const snapshot = await getDoc(userRef);
+  if (snapshot.exists()) {
+    const data = snapshot.data();
+    return data.notInterested;
   }
 
   return null;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import PersonCard from "../components/PersonCard";
 import Container from "../components/Container";
@@ -6,24 +6,38 @@ import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import { dummyMatches } from "../assets/dummydata";
 import Navbar from "../components/Navbar";
-import { computeMatchesBasedOnEncoding } from "../utility/knn";
+import { addNotInterested, addInterested, getNotInterested } from "../utility/firebase";
 
 function HomePage() {
   const theme = useTheme();
   const [matches, setMatches] = useState(dummyMatches);
   const [selected, setSelected] = useState("home");
+  const [notInterested, setNotInterested] = useState([]);
   const handleNotInterested = (id) => {
-    console.log("called");
+    addNotInterested(id);
     setMatches(matches.filter((match) => match.personal_info.id !== id));
-    console.log(matches);
   };
 
   const handleInterested = (name, id) => {
     alert(
       "We have sent a notification to " + name + " that you are interested!"
     );
+    addInterested(id);
     setMatches(matches.filter((match) => match.personal_info.id !== id));
   };
+
+  // useEffect(() => {
+  //   const getNotInterest = async () => {
+  //     const ppl = await getNotInterested();
+  //     setNotInterested(ppl);
+  //     console.log("yes", ppl)
+  //   };
+  //   getNotInterest();
+  //   console.log(notInterested)
+  //   setMatches(matches.filter((match) => !notInterested.includes(match.personal_info.id)))
+  // }
+  // , []);
+
   return (
     <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
       <Container>
