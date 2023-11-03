@@ -17,7 +17,7 @@ import EditPersonalPage from "./pages/EditPersonalPage";
 import EditPreferencePage from "./pages/EditPreferencePage";
 
 const privateRoutes = [
-  { path: "/onboarding", component: () => <FormPage /> },
+  // { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
   { path: "/requests", component: () => <RequestsPage /> },
   { path: "/profile", component: () => <ProfilePage /> },
@@ -46,7 +46,7 @@ function App() {
     <LoadingContainer isLoading={isLoading}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          {/* {isSignedIn && !isOnboarded && <Navigate to="/onboarding" />} */}
+          {isSignedIn && !isOnboarded && <Navigate to="/onboarding" />}
           <Routes>
             <Route
               path="*"
@@ -63,6 +63,20 @@ function App() {
               element={
                 isSignedIn ? (
                   <Navigate to="/onboarding" />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/onboarding"
+              element={
+                isSignedIn ? (
+                  isOnboarded ? (
+                    <Navigate to="/home" />
+                  ) : (
+                    <FormPage />
+                  )
                 ) : (
                   <Navigate to="/login" />
                 )
