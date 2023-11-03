@@ -6,30 +6,34 @@ import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import TextInput from "../components/TextInput";
 import Container from "../components/Container";
-import {submitFormInformation, fetchPersonalData} from "../utility/firebase";
- 
+import { submitFormInformation, fetchPersonalData } from "../utility/firebase";
+import LoadingContainer from "../components/LoadingContainer";
+
 const EditPersonalPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [dbState, setDBState] = useState({
-    PersonalData: {}
+    PersonalData: {},
   });
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
   const getInitialData = async () => {
     const data = await fetchPersonalData();
     setDBState(data);
-    setLoading(false);
+    setIsLoading(false);
   };
+
   useEffect(() => {
     getInitialData();
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.primary[1], minHeight: "100%" }}>
-      <ProfileHeader />
-      {
-        loading ? <h1>Loading...</h1> : 
+    <LoadingContainer isLoading={isLoading}>
+      <Box
+        sx={{ backgroundColor: theme.palette.primary[1], minHeight: "100%" }}
+      >
+        <ProfileHeader />
         <Box>
           <Container>
             <MultiSelect
@@ -65,14 +69,14 @@ const EditPersonalPage = () => {
               dbKey={["PersonalData", "GymPreference"]}
               options={["SPAC", "Blomquist"]}
             />
-              <MultiSelect
+            <MultiSelect
               label={"Usual Workout Time"}
               dbUpdate={setDBState}
               dbState={dbState}
               dbKey={["PersonalData", "UsualWorkoutTime"]}
               options={["Morning", "Afternoon", "Night"]}
             />
-              <MultiSelect
+            <MultiSelect
               label={"Goals"}
               dbUpdate={setDBState}
               dbState={dbState}
@@ -97,9 +101,9 @@ const EditPersonalPage = () => {
                     backgroundColor: theme.palette.primary["main"],
                   },
                 }}
-                onClick = {() => {
+                onClick={() => {
                   submitFormInformation(dbState);
-                  // navigate("/profile"); 
+                  // navigate("/profile");
                 }}
               >
                 Save
@@ -121,9 +125,8 @@ const EditPersonalPage = () => {
             </Box>
           </Container>
         </Box>
-      }
-      
-    </Box>
+      </Box>
+    </LoadingContainer>
   );
 };
 

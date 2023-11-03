@@ -5,7 +5,8 @@ import ProfileHeader from "../components/ProfileHeader";
 import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import Container from "../components/Container";
-import {submitFormInformation, fetchPersonalData} from "../utility/firebase"; 
+import { submitFormInformation, fetchPersonalData } from "../utility/firebase";
+import LoadingContainer from "../components/LoadingContainer";
 
 const EditPreferencePage = () => {
   // const uid = localStorage.getItem("uid");
@@ -13,25 +14,25 @@ const EditPreferencePage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [dbState, setDBState] = useState({
-    PartnerPreferences:  {} //userData.PartnerPreferences
+    PartnerPreferences: {}, //userData.PartnerPreferences
   });
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
   const getInitialData = async () => {
     const data = await fetchPersonalData();
     setDBState(data);
-    setLoading(false);
+    setIsLoading(false);
   };
+
   useEffect(() => {
     getInitialData();
   }, []);
 
-
   return (
-    <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
-      <ProfileHeader />
-      {
-        loading ? <h1>Loading...</h1> : 
+    <LoadingContainer isLoading={isLoading}>
+      <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
+        <ProfileHeader />
         <Box>
           <Container>
             <MultiSelect
@@ -63,7 +64,7 @@ const EditPreferencePage = () => {
               dbState={dbState}
               dbKey={["PartnerPreferences", "ExperienceLevel"]}
             />
-          
+
             <MultiSelect
               label={"Gym Preference"}
               dbUpdate={setDBState}
@@ -71,14 +72,14 @@ const EditPreferencePage = () => {
               dbKey={["PartnerPreferences", "GymPreference"]}
               options={["SPAC", "Blomquist"]}
             />
-              <MultiSelect
+            <MultiSelect
               label={"Usual Workout Time"}
               dbUpdate={setDBState}
               dbState={dbState}
               dbKey={["PartnerPreferences", "UsualWorkoutTime"]}
               options={["Morning", "Afternoon", "Night"]}
             />
-              <MultiSelect
+            <MultiSelect
               label={"Goals"}
               dbUpdate={setDBState}
               dbState={dbState}
@@ -105,8 +106,8 @@ const EditPreferencePage = () => {
                 }}
                 onClick={() => {
                   submitFormInformation(dbState);
-                  navigate("/profile"); 
-                } }
+                  navigate("/profile");
+                }}
               >
                 Save
               </Button>
@@ -121,18 +122,16 @@ const EditPreferencePage = () => {
                   },
                 }}
                 onClick={() => {
-                  navigate("/profile")}
-                }
+                  navigate("/profile");
+                }}
               >
                 Discard
               </Button>
             </Box>
           </Container>
         </Box>
-      }
-
-      
-    </Box>
+      </Box>
+    </LoadingContainer>
   );
 };
 
