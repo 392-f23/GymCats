@@ -7,19 +7,25 @@ import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import { handleLogOut } from "../utility/firebase";
 import { useNavigate } from "react-router-dom";
+import submitFormInformation from "../utility/firebase";
 
-const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
+const OnboardingPersonalPage = ({
+  updateDB,
+  previousStep,
+  nextStep,
+  dbState,
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const GoBack = () => {
-    // todo: make user sign out
+  const GoBack = async () => {
+    console.log(dbState);
+    await submitFormInformation(dbState);
     handleLogOut(navigate);
-    // previousStep();
+    previousStep();
   };
 
   const Continue = () => {
-    // update DB
     nextStep();
   };
 
@@ -55,16 +61,13 @@ const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
           <MultiSelect
             label={"Gender"}
             dbUpdate={updateDB}
+            dbState={dbState}
             dbKey={["PersonalData", "Gender"]}
-            options={[
-              "Male",
-              "Female",
-              "Nonbinary",
-              "Other"
-            ]}
+            options={["Male", "Female", "Nonbinary", "Other"]}
           />
           <TextInput
             label={"Age"}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "Age"]}
           />
@@ -77,8 +80,30 @@ const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
               "Expert (5+ years)",
             ]}
             values={["beginner", "intermediate", "advanced", "expert"]}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "ExperienceLevel"]}
+          />
+          <MultiSelect
+            label={"Gym Preference"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "GymPreference"]}
+            options={["SPAC", "Blomquist"]}
+          />
+          <MultiSelect
+            label={"Usual Workout Time"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "UsualWorkoutTime"]}
+            options={["Morning", "Afternoon", "Night"]}
+          />
+          <MultiSelect
+            label={"Goals"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "Goals"]}
+            options={["Powerlifting", "Bodybuilding", "Weightloss"]}
           />
         </Box>
         <Box
@@ -122,7 +147,7 @@ const OnboardingPersonalPage = ({ updateDB, previousStep, nextStep }) => {
         </Box>
       </Container>
     </Box>
-  )
+  );
 };
 
 export default OnboardingPersonalPage;

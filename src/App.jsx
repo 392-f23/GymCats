@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LoginPage from "./pages/LoginPage";
 import FormPage from "./pages/FormPage";
 import HomePage from "./pages/HomePage";
+import RequestsPage from "./pages/RequestsPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./Theme";
@@ -11,10 +12,17 @@ import {
 } from "./utility/firebase";
 import LoadingContainer from "./components/LoadingContainer";
 import "./App.css";
+import ProfilePage from "./pages/ProfilePage";
+import EditPersonalPage from "./pages/EditPersonalPage";
+import EditPreferencePage from "./pages/EditPreferencePage";
 
 const privateRoutes = [
-  { path: "/onboarding", component: () => <FormPage /> },
+  // { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
+  { path: "/requests", component: () => <RequestsPage /> },
+  { path: "/profile", component: () => <ProfilePage /> },
+  { path: "/profile/edit/personal", component: () => <EditPersonalPage /> },
+  { path: "/profile/edit/preference", component: () => <EditPreferencePage /> },
 ];
 
 const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
@@ -38,7 +46,7 @@ function App() {
     <LoadingContainer isLoading={isLoading}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          {/* {isSignedIn && !isOnboarded && <Navigate to="/onboarding" />} */}
+          {isSignedIn && !isOnboarded && <Navigate to="/onboarding" />}
           <Routes>
             <Route
               path="*"
@@ -55,6 +63,20 @@ function App() {
               element={
                 isSignedIn ? (
                   <Navigate to="/onboarding" />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/onboarding"
+              element={
+                isSignedIn ? (
+                  isOnboarded ? (
+                    <Navigate to="/home" />
+                  ) : (
+                    <FormPage />
+                  )
                 ) : (
                   <Navigate to="/login" />
                 )

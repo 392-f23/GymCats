@@ -6,6 +6,8 @@ import {
   setDoc,
   updateDoc,
   getDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -62,11 +64,7 @@ const handleLogin = async (navigate) => {
         // The email is associated with an existing account
         // Redirect to home page or perform the sign-in logic as needed
         const { user } = result;
-        const { displayName, photoURL, uid } = user;
-        localStorage.setItem("isSignedIn", true);
-        localStorage.setItem("name", displayName);
-        localStorage.setItem("photoUrl", photoURL);
-        localStirage.setItem("uid", uid);
+        signInWithGoogle(user, navigate)
         navigate("/home");
       }
     })
@@ -86,6 +84,9 @@ const handleLogOut = (navigate) => {
   localStorage.removeItem("name");
   localStorage.removeItem("photoUrl");
   localStorage.removeItem("uid");
+
+  localStorage.removeItem("PersonalData")
+  localStorage.removeItem("PartnerPreferences")
   navigate(0);
 };
 
@@ -112,17 +113,11 @@ const signUpWithGoogle = async (navigate) => {
           displayName: user.displayName,
           photoURL: user.photoURL,
           onboarded: false,
+          PersonalData: {},
+          PartnerPreferences: {},
         };
-
         await setDoc(userDocRef, userData, { merge: true });
-
-        const { displayName, photoURL, uid } = user;
-
-        localStorage.setItem("isSignedIn", true);
-        localStorage.setItem("name", displayName);
-        localStorage.setItem("photoUrl", photoURL);
-        localStorage.setItem("uid", uid);
-        navigate(0);
+        signInWithGoogle(user, navigate);
       }
     })
     .catch((error) => {
@@ -130,12 +125,18 @@ const signUpWithGoogle = async (navigate) => {
     });
 };
 
-const signInWithGoogle = (user, navigate) => {
+const signInWithGoogle = async (user, navigate) => {
   const { displayName, photoURL, uid } = user;
   localStorage.setItem("isSignedIn", true);
   localStorage.setItem("name", displayName);
   localStorage.setItem("photoUrl", photoURL);
   localStorage.setItem("uid", uid);
+
+  const userDocRef = doc(db, "users", uid);
+  const userDoc = await getDoc(userDocRef);
+  const data = userDoc.data()
+  localStorage.setItem("PersonalData", JSON.stringify(data.PersonalData))
+  localStorage.setItem("PartnerPreferences", JSON.stringify(data.PartnerPreferences))
   navigate(0);
 };
 
@@ -163,108 +164,76 @@ const isOnboarded = async () => {
 };
 
 const submitFormInformation = async (dbState) => {
-  // const id = localStorage.getItem("uid");
-  const id = "test";
-  const userDocRef = doc(db, "users", id);
+  console.log(dbState)
+  const uid = localStorage.getItem("uid");
+  const userDocRef = doc(db, "users", uid)
   await setDoc(userDocRef, dbState, { merge: true });
   await updateDoc(userDocRef, dbState);
 };
 /*
-export const addExpense = async (newSpending) => {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
+const updatePersonalInfo = async (dbState) => {
+    const uid = localStorage.getItem("uid"); 
+    const userDocRef = doc(db, "users", uid); 
+    await setDoc(userDocRef, )
+}*/
 
-  const docSnap = await getDoc(userDocRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const { expenses, SpendingHistory } = data;
-    const { category, subcategory, amount } = newSpending;
-
-    if (category in expenses) {
-      const { subExpense, total } = expenses[category];
-
-      if (subcategory in subExpense) {
-        const value = subExpense[subcategory] + amount;
-        const newSubExpense = {
-          ...subExpense,
-          [subcategory]: value,
-        };
-
-        const newExpense = {
-          ...expenses,
-          [category]: {
-            subExpense: newSubExpense,
-            total: total + amount,
-          },
-        };
-
-        await updateDoc(userDocRef, {
-          expenses: newExpense,
-        });
-      }
-    }
-
-    SpendingHistory.push(newSpending);
-
-    await updateDoc(userDocRef, {
-      SpendingHistory: SpendingHistory,
-    });
+const fetchUserData = async (uid) => {
+  const userRef = doc(db, "users", uid);
+  const snapshot = await getDoc(userRef);
+  console.log(snapshot.data())
+  if (snapshot.exists()) {
+    const data = await snapshot.data();
+    return data;
   }
+
+  return null;
 };
 
-export async function changeIncome(income) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  await updateDoc(userDocRef, {
-    income: income,
-  });
-}
-
-export async function changeBudget(budget) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  await updateDoc(userDocRef, {
-    budget: budget,
-  });
-}
-
-export async function updateData(obj) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  await updateDoc(userDocRef, {
-    expenses: obj,
-  });
-}
-
-export async function changeBudgetByCategory(category, budget) {
-  const id = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", id);
-  const docSnap = await getDoc(userDocRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const { budgetByCategory } = data;
-
-    const newBudgetByCategory = {
-      ...budgetByCategory,
-      [category]: budget,
-    };
-
-    await updateDoc(userDocRef, {
-      budgetByCategory: newBudgetByCategory,
-    });
-
-    const newTotal = Object.entries(newBudgetByCategory).reduce(
-      (sum, [_, value]) => sum + value,
-      0
-    );
-
-    await updateDoc(userDocRef, {
-      budget: newTotal,
-    });
+export const fetchPersonalData = async () => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  const snapshot = await getDoc(userRef);
+  if (snapshot.exists()) {
+    
+    const data = snapshot.data();
+    return data;
   }
-}*/
+
+  return null;
+}
+
+export const addNotInterested = async (id) => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  await updateDoc(userRef, {
+    notInterested: arrayUnion(id),
+  });
+}
+
+export const addInterested = async (id) => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  await updateDoc(userRef, {
+    interested: arrayUnion(id),
+  });
+
+  const userRef2 = doc(db, "users", id);
+  await updateDoc(userRef2, {
+    requests: arrayUnion(uid),
+  });
+}
+
+export const getNotInterested = async () => {
+  const uid = localStorage.getItem("uid");
+  const userRef = doc(db, "users", uid);
+  const snapshot = await getDoc(userRef);
+  if (snapshot.exists()) {
+    const data = snapshot.data();
+    return data.notInterested;
+  }
+
+  return null;
+}
 
 export {
   db,
@@ -279,6 +248,7 @@ export {
   checkIfLoggedIn,
   isOnboarded,
   submitFormInformation,
+  fetchUserData,
 };
 
 export default submitFormInformation;

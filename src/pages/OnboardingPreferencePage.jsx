@@ -5,6 +5,7 @@ import Container from "../components/Container";
 import photoUrl from "../assets/profile.jpeg";
 import submitFormInformation from "../utility/firebase";
 import { StyledDivider } from "../components/StyledDivider";
+import { useNavigate } from "react-router-dom";
 
 const OnboardingPreferencePage = ({
   updateDB,
@@ -13,15 +14,22 @@ const OnboardingPreferencePage = ({
   dbState,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const GoBack = () => {
     previousStep();
   };
 
-  const Continue = () => {
-    //TODO fix submit form information
-    submitFormInformation(dbState);
-    nextStep();
+  const Continue = async () => {
+    const formInformation = Object.assign(dbState, {
+      Friends: [],
+      Requests: [],
+      NotInterested: [],
+      onboarded: true,
+    });
+
+    await submitFormInformation(formInformation);
+    navigate(0);
   };
 
   return (
@@ -56,20 +64,17 @@ const OnboardingPreferencePage = ({
           </Typography>
           <MultiSelect
             label={"Gender"}
+            options={["Male", "Female", "Nonbinary", "Other", "No Preference"]}
+            values={["male", "female", "nonbinary", "other", "no preference"]}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PartnerPreferences", "Gender"]}
-            showNoPreference={true}
-            options={[
-              "Male",
-              "Female",
-              "Nonbinary",
-              "Other"
-            ]}
           />
           <SingleSelect
             label={"Age"}
             options={["18-20", "20-30", "30-40", "40+"]}
             values={["18-20", "20-30", "30-40", "40+"]}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PartnerPreferences", "Age"]}
           />
@@ -82,8 +87,30 @@ const OnboardingPreferencePage = ({
               "Expert (5+ years)",
             ]}
             values={["beginner", "intermediate", "advanced", "expert"]}
+            dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PartnerPreferences", "ExperienceLevel"]}
+          />
+          <MultiSelect
+            label={"Gym Preference"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PartnerPreferences", "GymPreference"]}
+            options={["SPAC", "Blomquist"]}
+          />
+          <MultiSelect
+            label={"Usual Workout Time"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PartnerPreferences", "UsualWorkoutTime"]}
+            options={["Morning", "Afternoon", "Night"]}
+          />
+          <MultiSelect
+            label={"Goals"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PartnerPreferences", "Goals"]}
+            options={["Powerlifting", "Bodybuilding", "Weightloss"]}
           />
         </Box>
         <Box

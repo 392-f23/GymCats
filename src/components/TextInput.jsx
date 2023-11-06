@@ -1,39 +1,32 @@
-import { Grid, TextField, Typography, useTheme } from "@mui/material";
-import { useState, useEffect } from "react";
-import { db } from "../utility/firebase";
 import {
-  doc,
-  getDoc,
-} from "firebase/firestore";
+  Grid,
+  TextField,
+  Typography,
+  useTheme
+} from "@mui/material";
+import { useState, useEffect } from "react";
 
-function TextInput({ label, dbUpdate, dbKey }) {
+function TextInput({
+  label,
+  dbState,
+  dbUpdate,
+  dbKey
+}) {
   const theme = useTheme();
   const [value, setValue] = useState("");
+  const [firstKey, secondKey] = dbKey
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // replace 'test' with user id
-        const userDocRef = doc(db, "users", 'test');
-        const doc2 = await getDoc(userDocRef);
-        if (doc2.exists && doc2.data()[dbKey[0]][dbKey[1]] != undefined) {
-          setValue(doc2.data()[dbKey[0]][dbKey[1]]);
-        } else {
-          console.log('Document not found');
-          setValue('')
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (dbState[firstKey][secondKey]) {
+      setValue(dbState[firstKey][secondKey])
+    }
+  }, [dbState]);
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
+  const handleChange = (newValue) => {
+    setValue(newValue);
     dbUpdate(prevState => {
-      prevState[dbKey[0]][dbKey[1]] = e.target.value
-      return prevState                                 
+      prevState[firstKey][secondKey] = newValue;
+      return prevState
     })
   };
 
@@ -58,7 +51,7 @@ function TextInput({ label, dbUpdate, dbKey }) {
         <TextField
           variant="outlined"
           value={value}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e.target.value)}
           sx={{
             color: theme.palette.text.primary,
             width: "100%",

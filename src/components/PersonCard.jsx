@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -8,9 +8,21 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import CloseIcon from "@mui/icons-material/Close";
 
-function PersonCard({ person, photoURL, handleInterested, handleNotInterested }) {
+function PersonCard({
+  person,
+  photoURL,
+  handleInterested,
+  handleNotInterested,
+  showInterestedButtons = true,
+  showRemoveButton = false,
+  showExpandedIconButton = true,
+  handleClose,
+  handleRemoveFriend, // todo: needs to be implemented
+}) {
   const info = person.personal_info;
   const age = info.Age;
   const experience = info.Experience_Level;
@@ -25,6 +37,8 @@ function PersonCard({ person, photoURL, handleInterested, handleNotInterested })
   const id = info.id;
 
   const theme = useTheme();
+
+  const [isExpanded, setIsExpanded] = useState(!showExpandedIconButton);
 
   return (
     <Card
@@ -81,20 +95,43 @@ function PersonCard({ person, photoURL, handleInterested, handleNotInterested })
               {school} | {major}
             </Typography>
           </Box>
-          <IconButton
-            sx={{
-              ml: 2,
-              mr: 2,
-              backgroundColor: theme.palette.primary.main,
-              filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
-              transition: "0.2s",
-              "&:hover": {
-                backgroundColor: theme.palette.primary[3],
-              },
-            }}
-          >
-            <MoreHorizIcon sx={{ color: theme.palette.text.primary }} />
-          </IconButton>
+          {showExpandedIconButton ? (
+            <IconButton
+              sx={{
+                ml: 2,
+                mr: 2,
+                backgroundColor: theme.palette.primary.main,
+                filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                transition: "0.2s",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary[3],
+                },
+              }}
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? (
+                <ExpandLessIcon sx={{ color: theme.palette.text.primary }} />
+              ) : (
+                <ExpandMoreIcon sx={{ color: theme.palette.text.primary }} />
+              )}
+            </IconButton>
+          ) : (
+            <IconButton
+              sx={{
+                ml: 2,
+                mr: 2,
+                backgroundColor: theme.palette.primary.main,
+                filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                transition: "0.2s",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary[3],
+                },
+              }}
+              onClick={handleClose}
+            >
+              <CloseIcon sx={{ color: theme.palette.text.primary }} />
+            </IconButton>
+          )}
         </Box>
         <Box
           sx={{
@@ -128,22 +165,42 @@ function PersonCard({ person, photoURL, handleInterested, handleNotInterested })
             color={theme.palette.text.secondary}
             sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
           >
-            <span style={{ fontWeight: 700 }}>Workout Frequency</span>: {freq}
-          </Typography>
-          <Typography
-            variant="p"
-            color={theme.palette.text.secondary}
-            sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
-          >
             <span style={{ fontWeight: 700 }}>Goals</span>: {goal}
           </Typography>
-          <Typography
-            variant="p"
-            color={theme.palette.text.secondary}
-            sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
-          >
-            <span style={{ fontWeight: 700 }}>Gym Preference</span>: {gym}
-          </Typography>
+          {/* expanded */}
+          {isExpanded && (
+            <>
+              <Typography
+                variant="p"
+                color={theme.palette.text.secondary}
+                sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
+              >
+                <span style={{ fontWeight: 700 }}>Age</span>: {age}
+              </Typography>
+              <Typography
+                variant="p"
+                color={theme.palette.text.secondary}
+                sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
+              >
+                <span style={{ fontWeight: 700 }}>Gender</span>: {gender}
+              </Typography>
+              <Typography
+                variant="p"
+                color={theme.palette.text.secondary}
+                sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
+              >
+                <span style={{ fontWeight: 700 }}>Workout Frequency</span>:{" "}
+                {freq}x/week
+              </Typography>
+              <Typography
+                variant="p"
+                color={theme.palette.text.secondary}
+                sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
+              >
+                <span style={{ fontWeight: 700 }}>Gym Preference</span>: {gym}
+              </Typography>
+            </>
+          )}
           <Box
             sx={{
               width: "89%",
@@ -156,40 +213,61 @@ function PersonCard({ person, photoURL, handleInterested, handleNotInterested })
               mt: 2,
             }}
           >
-            <Button
-              sx={{
-                width: "45%",
-                backgroundColor: theme.palette.primary[2],
-                color: theme.palette.text.secondary,
-                borderRadius: "40px",
-                filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
-                "&:hover": {
-                  backgroundColor: theme.palette.primary[4],
-                }
-              }}
-              onClick={() => handleInterested(name, id)}
-            >
-              <Typography variant="p" sx={{ fontSize: "0.9rem" }} >
-                Interested
-              </Typography>
-            </Button>
-            <Button
-              sx={{
-                width: "45%",
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.text.primary,
-                borderRadius: "40px",
-                filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
-                "&:hover": {
-                  backgroundColor: theme.palette.primary[3],
-                }
-              }}
-              onClick={() => handleNotInterested(id)}
-            >
-              <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
-                Not Interested
-              </Typography>
-            </Button>
+            {showInterestedButtons && (
+              <>
+                <Button
+                  sx={{
+                    width: "45%",
+                    backgroundColor: theme.palette.primary[2],
+                    color: theme.palette.text.secondary,
+                    borderRadius: "40px",
+                    filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary[4],
+                    },
+                  }}
+                  onClick={() => handleInterested(name, id)}
+                >
+                  <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
+                    Interested
+                  </Typography>
+                </Button>
+                <Button
+                  sx={{
+                    width: "45%",
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.text.primary,
+                    borderRadius: "40px",
+                    filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary[3],
+                    },
+                  }}
+                  onClick={() => handleNotInterested(id)}
+                >
+                  <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
+                    Not Interested
+                  </Typography>
+                </Button>
+              </>
+            )}
+            {showRemoveButton && (
+              <Button
+                sx={{
+                  width: "100%",
+                  backgroundColor: theme.palette.primary[5],
+                  color: theme.palette.text.primary,
+                  borderRadius: "40px",
+                  filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                  "&:hover": {
+                    backgroundColor: theme.palette.primary[6],
+                  },
+                }}
+                onClick={() => handleRemoveFriend(id)}
+              >
+                Remove Friend
+              </Button>
+            )}
           </Box>
         </Box>
       </CardContent>

@@ -5,25 +5,33 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function MultiSelect({
-  label,
-  dbUpdate,
-  dbKey,
-  showNoPreference = false,
-  options,
-}) {
+function MultiSelect({ label, options, values, dbState, dbUpdate, dbKey }) {
+  //array of values selected for given multiselect button group! 
   const [selectedList, setSelectedList] = useState([]);
+  const [firstKey, secondKey] = dbKey;
+
+  useEffect(() => {
+    if (dbState[firstKey][secondKey]) {
+      setSelectedList(dbState[firstKey][secondKey]);
+    }
+  }, [dbState]);
 
   const handleToggle = (event, newSelectedList) => {
+    console.log(`in handleToggle fn: ${event.target.value}`); 
+    console.log("new Selected List: \n")
+    console.log(newSelectedList); 
     setSelectedList(newSelectedList);
 
-    // db update
     dbUpdate((prevState) => {
-      prevState[dbKey[0]][dbKey[1]] = newSelectedList;
-      return prevState;
-    });
+      //const newState = {...prevState, firstKey: {secondKey: newSelectedList}}; 
+      prevState[firstKey][secondKey] = newSelectedList;
+      console.log("dbUpdate called!")
+      console.log(`updated prevSTATE: \n`)
+      console.log(prevState); 
+      return prevState
+    }); 
   };
 
   const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
@@ -79,15 +87,15 @@ function MultiSelect({
         }}
       >
         {options.map((option) => (
-          <StyledToggleButton key={option} value={option} sx={{ mr: 2, mb: 2 }}>
+          <StyledToggleButton
+            key={option}
+            // value={values[options.indexOf(option)]}
+            value={option}
+            sx={{ mr: 2, mb: 2 }}
+          >
             {option}
           </StyledToggleButton>
         ))}
-        {showNoPreference && (
-          <StyledToggleButton label={"No Preference"} value={"No Preference"}>
-            No Preference
-          </StyledToggleButton>
-        )}
       </ToggleButtonGroup>
     </Box>
   );
