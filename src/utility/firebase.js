@@ -17,13 +17,13 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCzLs1kyY9QCLjdk7cTXP0NNOYmmRoVl4U",
-  authDomain: "gymbuddy-e9e14.firebaseapp.com",
-  projectId: "gymbuddy-e9e14",
-  storageBucket: "gymbuddy-e9e14.appspot.com",
-  messagingSenderId: "930913179368",
-  appId: "1:930913179368:web:76edd7769ae673bef05b5d",
-  measurementId: "G-K3JSSHGDW7",
+  apiKey: "AIzaSyCheiE1GJdxLHhv5Fb2ur_HN9sP6m3a8Sk",
+  authDomain: "gymcats-4c921.firebaseapp.com",
+  projectId: "gymcats-4c921",
+  storageBucket: "gymcats-4c921.appspot.com",
+  messagingSenderId: "947718356723",
+  appId: "1:947718356723:web:bbcd0a1e16f99dcd034186",
+  measurementId: "G-3THLV2DSEV",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -169,7 +169,7 @@ const submitFormInformation = async (dbState) => {
   await setDoc(userDocRef, dbState, { merge: true });
   await updateDoc(userDocRef, dbState);
 };
-
+/*
 export const addExpense = async (newSpending) => {
   const id = localStorage.getItem("uid");
   const userDocRef = doc(db, "users", id);
@@ -264,7 +264,7 @@ export async function changeBudgetByCategory(category, budget) {
       budget: newTotal,
     });
   }
-}
+}*/
 
 export {
   db,
