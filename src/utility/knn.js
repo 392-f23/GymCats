@@ -68,12 +68,12 @@ const encodeFeatures = (allUserData, personalUserId) => {
 
 export const computeMatchesBasedOnEncoding = (allUserData, personalUserId, N) => {
     ///Output format: [["similarity_dist", "matchid"], ...] => sorted so in home page we can display top N! 
-    const [allUserIds, personalDatafeatures, partnerPreferencesFeatures] = encodeFeatures(allUserData);
+    const [allUserIds, personalDataFeatures, partnerPreferencesFeatures] = encodeFeatures(allUserData);
     let personalUserIdIndex = allUserIds.indexOf(personalUserId)
     let distances = []
     allUserIds.forEach((partnerUserId, partnerUserIdIndex) => {
         if (partnerUserId != personalUserId) {
-            const distance = euclideanDistance(personalDataFeatures[personalUserIdIndex], partnerPreferencesFeatures[partnerUserIdIndex])
+            const distance = euclideanDistance(partnerPreferencesFeatures[personalUserIdIndex], personalDataFeatures[partnerUserIdIndex])
             distances.push([distance, partnerUserId])
         }
     })
