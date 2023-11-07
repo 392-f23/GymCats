@@ -2,7 +2,8 @@
 
 const encodeFeatures = (allUserData, personalUserId) => {
     let uids = [];
-    let features= [];
+    let personalDataFeatures = [];
+    let partnerPreferencesFeatures = [];
     let index = 0
     for(const user in allUserData) {
         uids.push(user.uid)
@@ -16,9 +17,11 @@ const encodeFeatures = (allUserData, personalUserId) => {
     //         "Goals": ["Powerlifting"],
     //         "GymPreference": "SPAC"
     // }
-        features.push([])
+        personalDataFeatures.push([])
+        partnerPreferencesFeatures.push([])
         for(const gender in ["Male", "Female", "Nonbinary", "Other"]){
-            features[index].push(userData.PartnerPreferences.Gender.includes(gender) ? 1 : 0)
+            personalDataFeatures[index].push(userData.PersonalData.Gender.includes(gender) ? 1 : 0)
+            partnerPreferencesFeatures[index].push(userData.PersonalData.Gender.includes(gender) ? 1 : 0)
         }
         // TODO implement age encoding
         
@@ -31,39 +34,46 @@ const encodeFeatures = (allUserData, personalUserId) => {
                 lowAge = age.split("+")[0]; 
                 highAge = 100; 
             }
-            features[index].push(lowAge <= userData.Age <= highAge ? 1 : 0); 
+            personalDataFeatures[index].push(lowAge <= userData.PersonalData.Age <= highAge ? 1 : 0);
+            partnerPreferencesFeatures[index].push(lowAge <= userData.PartnerPreferences.Age <= highAge ? 1 : 0); 
         }
 
         for(const expLevel in ["Beginner (<1 year)", "Intermediate (1-3 years)","Advanced (3-5 years)", "Expert (5+ years)"]){
-            features[index].push(userData.PartnerPreferences.ExperienceLevel.includes(expLevel) ? 1 : 0)
+            personalDataFeatures[index].push(userData.PersonalData.ExperienceLevel.includes(expLevel) ? 1 : 0)
+            partnerPreferencesFeatures[index].push(userData.PartnerPreferences.ExperienceLevel.includes(expLevel) ? 1 : 0)
         }
         for(const gym in ["SPAC", "Blomquist"]){
-            features[index].push(userData.PartnerPreferences.GymPreference.includes(gym) ? 1 : 0); 
+            personalDataFeatures[index].push(userData.PersonalData.GymPreference.includes(gym) ? 1 : 0); 
+            partnerPreferencesFeatures[index].push(userData.PartnerPreferences.GymPreference.includes(gym) ? 1 : 0); 
         }
         for(const freq in ["1", "2", "3", "4", "5", "6", "7"]){
-            features[index].push(userData.PartnerPreferences.WorkoutFrequency.includes(freq) ? 1 : 0); 
+            personalDataFeatures[index].push(userData.PersonalData.WorkoutFrequency.includes(freq) ? 1 : 0); 
+            partnerPreferencesFeatures[index].push(userData.PartnerPreferences.WorkoutFrequency.includes(freq) ? 1 : 0); 
         }
         for(const time in ["Morning", "Afternoon", "Night"]){
-            features[index].push(userData.PartnerPreferences.UsualWorkoutTime.includes(time) ? 1 : 0);
+            personalDataFeatures[index].push(userData.PersonalData.UsualWorkoutTime.includes(time) ? 1 : 0);
+            partnerPreferencesFeatures[index].push(userData.PartnerPreferences.UsualWorkoutTime.includes(time) ? 1 : 0);
         }
         for(const goal in ["Powerlifting", "Bodybuilding", "Weightloss"]){
-            features[index].push(userData.PartnerPreferences.Goals.includes(goal) ? 1 : 0);
+            personalDataFeatures[index].push(userData.PersonalData.Goals.includes(goal) ? 1 : 0);
+            partnerPreferencesFeatures[index].push(userData.PartnerPreferences.Goals.includes(goal) ? 1 : 0);
         }
         index++;
     }
     console.log("encodedFeatures: \n")
-    console.log(features)
-    return [uids, features]
+    console.log(personalDataFeatures)
+    console.log(partnerPreferencesFeatures)
+    return [uids, personalDataFeatures, partnerPreferencesFeatures]
 }
 
 export const computeMatchesBasedOnEncoding = (allUserData, personalUserId, N) => {
     ///Output format: [["similarity_dist", "matchid"], ...] => sorted so in home page we can display top N! 
-    const [allUserIds, features] = encodeFeatures(allUserData);
-    let personalUserIdIndex = features[allUserIds.indexOf(personalUserId)]
+    const [allUserIds, personalDatafeatures, partnerPreferencesFeatures] = encodeFeatures(allUserData);
+    let personalUserIdIndex = allUserIds.indexOf(personalUserId)
     let distances = []
     allUserIds.forEach((partnerUserId, partnerUserIdIndex) => {
         if (partnerUserId != personalUserId) {
-            const distance = euclideanDistance(features[personalUserIdIndex], features[partnerUserIdIndex])
+            const distance = euclideanDistance(personalDataFeatures[personalUserIdIndex], partnerPreferencesFeatures[partnerUserIdIndex])
             distances.push([distance, partnerUserId])
         }
     })
