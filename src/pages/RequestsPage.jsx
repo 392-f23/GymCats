@@ -33,10 +33,13 @@ const RequestsPage = () => {
       });
 
       const tempFriends = [];
-      await Promise.all(friendPromises).then((userData) => {
-        const [user] = userData;
-        tempFriends.push(user);
-      });
+
+      if (friendPromises.length > 0) {
+        await Promise.all(friendPromises).then((userData) => {
+          const [user] = userData;
+          tempFriends.push(user);
+        });
+      }
 
       const requestPromises = [];
       requestUids.forEach((requestUid) => {
@@ -49,12 +52,15 @@ const RequestsPage = () => {
       });
 
       const tempRequests = [];
-      await Promise.all(requestPromises).then((userData) => {
-        const [user] = userData;
-        tempRequests.push(user);
-      });
 
-      // setFriednds(tempFriends);
+      if (requestPromises.length > 0) {
+        await Promise.all(requestPromises).then((userData) => {
+          const [user] = userData;
+          tempRequests.push(user);
+        });
+      }
+
+      setFriends(tempFriends);
       setFriendRequests(tempRequests);
 
       setIsLoading(false);

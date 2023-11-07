@@ -183,7 +183,6 @@ const updatePersonalInfo = async (dbState) => {
 const fetchUserData = async (uid) => {
   const userRef = doc(db, "users", uid);
   const snapshot = await getDoc(userRef);
-  console.log(snapshot.data());
   if (snapshot.exists()) {
     const data = await snapshot.data();
     return data;
