@@ -13,9 +13,10 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PersonModal from "./PersonModal";
 import { useState } from "react";
 
-function FriendRequestCard({ person, photoURL }) {
+function FriendRequestCard({ person }) {
   const theme = useTheme();
   const [personModalOpen, setPersonModalOpen] = useState(false);
+  const { displayName, photoURL } = person;
 
   const handlePersonModalOpen = () => setPersonModalOpen(true);
   const handlePersonModalClose = () => setPersonModalOpen(false);
@@ -72,7 +73,7 @@ function FriendRequestCard({ person, photoURL }) {
                 color={theme.palette.text.secondary}
                 sx={{ textAlign: "center" }}
               >
-                {person.personal_info.Name}
+                {displayName}
               </Typography>
               <Box
                 sx={{

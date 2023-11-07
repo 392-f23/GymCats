@@ -25,7 +25,7 @@ const firebaseConfig = {
   storageBucket: "gymbuddy-e9e14.appspot.com",
   messagingSenderId: "930913179368",
   appId: "1:930913179368:web:3487a1bc32808655f05b5d",
-  measurementId: "G-ZW2TNBKVSZ"
+  measurementId: "G-ZW2TNBKVSZ",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -64,7 +64,7 @@ const handleLogin = async (navigate) => {
         // The email is associated with an existing account
         // Redirect to home page or perform the sign-in logic as needed
         const { user } = result;
-        signInWithGoogle(user, navigate)
+        signInWithGoogle(user, navigate);
         navigate("/home");
       }
     })
@@ -85,8 +85,8 @@ const handleLogOut = (navigate) => {
   localStorage.removeItem("photoUrl");
   localStorage.removeItem("uid");
 
-  localStorage.removeItem("PersonalData")
-  localStorage.removeItem("PartnerPreferences")
+  localStorage.removeItem("PersonalData");
+  localStorage.removeItem("PartnerPreferences");
   navigate(0);
 };
 
@@ -134,9 +134,12 @@ const signInWithGoogle = async (user, navigate) => {
 
   const userDocRef = doc(db, "users", uid);
   const userDoc = await getDoc(userDocRef);
-  const data = userDoc.data()
-  localStorage.setItem("PersonalData", JSON.stringify(data.PersonalData))
-  localStorage.setItem("PartnerPreferences", JSON.stringify(data.PartnerPreferences))
+  const data = userDoc.data();
+  localStorage.setItem("PersonalData", JSON.stringify(data.PersonalData));
+  localStorage.setItem(
+    "PartnerPreferences",
+    JSON.stringify(data.PartnerPreferences)
+  );
   navigate(0);
 };
 
@@ -164,9 +167,9 @@ const isOnboarded = async () => {
 };
 
 const submitFormInformation = async (dbState) => {
-  console.log(dbState)
+  console.log(dbState);
   const uid = localStorage.getItem("uid");
-  const userDocRef = doc(db, "users", uid)
+  const userDocRef = doc(db, "users", uid);
   await setDoc(userDocRef, dbState, { merge: true });
   await updateDoc(userDocRef, dbState);
 };
@@ -180,7 +183,7 @@ const updatePersonalInfo = async (dbState) => {
 const fetchUserData = async (uid) => {
   const userRef = doc(db, "users", uid);
   const snapshot = await getDoc(userRef);
-  console.log(snapshot.data())
+  console.log(snapshot.data());
   if (snapshot.exists()) {
     const data = await snapshot.data();
     return data;
@@ -190,50 +193,50 @@ const fetchUserData = async (uid) => {
 };
 
 export const fetchAllData = async () => {
-  const userCol = await collection(db, "users"); 
-  console.log("usrColl: ", userCol); 
-  var userData = {}
-  userCol.forEach(doc => {
-    userData[doc.id] = doc.data(); 
+  const userCol = await collection(db, "users");
+  console.log("usrColl: ", userCol);
+  var userData = {};
+  userCol.forEach((doc) => {
+    userData[doc.id] = doc.data();
   });
   return userData;
-}
+};
 
 export const fetchPersonalData = async () => {
   const uid = localStorage.getItem("uid");
   const userRef = doc(db, "users", uid);
   const snapshot = await getDoc(userRef);
   if (snapshot.exists()) {
-    
     const data = snapshot.data();
     return data;
   }
 
   return null;
-}
-//handlers to update DB for not-interested and interested requests! 
+};
+//handlers to update DB for not-interested and interested requests!
 export const addNotInterested = async (id) => {
   const uid = localStorage.getItem("uid");
   const userRef = doc(db, "users", uid);
   await updateDoc(userRef, {
-    notInterested: arrayUnion(id),
+    NotInterested: arrayUnion(id),
   });
-}
+};
 
+// TODO: Remove from homepage after sending interested request
 export const addInterested = async (id) => {
-  console.log("addInterested call")
+  console.log("addInterested call");
   const uid = localStorage.getItem("uid");
-  console.log(`id arg: ${id}`)
+  console.log(`id arg: ${id}`);
   const userRef = doc(db, "users", uid);
   await updateDoc(userRef, {
-    interested: arrayUnion(id),
+    Requests: arrayUnion(id),
   });
 
   const userRef2 = doc(db, "users", id);
   await updateDoc(userRef2, {
     requests: arrayUnion(uid),
   });
-}
+};
 
 export const getNotInterested = async () => {
   const uid = localStorage.getItem("uid");
@@ -245,7 +248,7 @@ export const getNotInterested = async () => {
   }
 
   return null;
-}
+};
 
 export {
   db,

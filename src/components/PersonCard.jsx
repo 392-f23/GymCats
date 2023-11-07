@@ -197,7 +197,8 @@ function PersonCard({
                 color={theme.palette.text.secondary}
                 sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
               >
-                <span style={{ fontWeight: 700 }}>Gym Preference</span>: {gym.join(", ")}
+                <span style={{ fontWeight: 700 }}>Gym Preference</span>:{" "}
+                {gym.join(", ")}
               </Typography>
             </>
           )}
@@ -215,7 +216,7 @@ function PersonCard({
           >
             {showInterestedButtons && (
               <>
-              <Button
+                <Button
                   sx={{
                     width: "45%",
                     backgroundColor: theme.palette.primary.main,
@@ -227,7 +228,7 @@ function PersonCard({
                     },
                   }}
                   onClick={() => {
-                    handleNotInterested(id)
+                    handleNotInterested(id);
                   }}
                 >
                   <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
@@ -245,9 +246,10 @@ function PersonCard({
                       backgroundColor: theme.palette.primary[4],
                     },
                   }}
-                  onClick={() =>{
-                  console.log(`interested person id: ${id}`); 
-                  handleInterested(name, id);}}
+                  onClick={() => {
+                    console.log(`interested person id: ${id}`);
+                    handleInterested(name, id);
+                  }}
                 >
                   <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
                     Interested

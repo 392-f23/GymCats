@@ -17,18 +17,48 @@ const RequestsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('useEffect called inside RequestsPage')
     const init = async () => {
       const uid = localStorage.getItem("uid");
       const userInfo = await fetchUserData(uid);
-      const { Friends: fetchedFriends, Requests: fetchedRequests } = userInfo;
-      console.log("fetchedFriends", fetchedFriends); 
-      console.log("fetchedRequests", fetchedRequests); 
-      setFriends(fetchedFriends);
-      setFriendRequests(fetchedRequests);
+      const { Friends: friendUids, Requests: requestUids } = userInfo;
+
+      const friendPromises = [];
+      friendUids.forEach((friendUid) => {
+        friendPromises.push(
+          new Promise(async function (resolve, reject) {
+            const requestData = await fetchUserData(friendUid);
+            resolve(requestData);
+          })
+        );
+      });
+
+      const tempFriends = [];
+      await Promise.all(friendPromises).then((userData) => {
+        const [user] = userData;
+        tempFriends.push(user);
+      });
+
+      const requestPromises = [];
+      requestUids.forEach((requestUid) => {
+        requestPromises.push(
+          new Promise(async function (resolve, reject) {
+            const requestData = await fetchUserData(requestUid);
+            resolve(requestData);
+          })
+        );
+      });
+
+      const tempRequests = [];
+      await Promise.all(requestPromises).then((userData) => {
+        const [user] = userData;
+        tempRequests.push(user);
+      });
+
+      // setFriednds(tempFriends);
+      setFriendRequests(tempRequests);
+
       setIsLoading(false);
     };
-    //call this async function to get user-specific info about cur state of friends, requests to current logged in user... 
     init();
   }, []);
 
@@ -48,7 +78,7 @@ const RequestsPage = () => {
             <Typography variant="h1">GymCats</Typography>
             <Box
               component="img"
-              src={photoUrl}
+              src={localStorage.getItem("photoUrl")}
               sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
             />
           </Box>
@@ -104,11 +134,7 @@ const RequestsPage = () => {
             }}
           >
             {friendRequests.map((match, index) => (
-              <FriendRequestCard
-                key={index}
-                person={match}
-                photoURL={photoUrl}
-              />
+              <FriendRequestCard key={index} person={match} />
             ))}
           </Box>
         </Container>
