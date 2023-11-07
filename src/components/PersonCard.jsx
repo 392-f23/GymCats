@@ -267,7 +267,7 @@ function PersonCard({
                     backgroundColor: theme.palette.primary[6],
                   },
                 }}
-                onClick={() => handleRemoveFriend(id)}
+                onClick={() => handleNotInterested(id)}
               >
                 Remove Friend
               </Button>

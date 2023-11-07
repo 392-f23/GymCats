@@ -1,6 +1,6 @@
 //OUR K-Nearest-Neighbors match making algorithm! 
 
-const encodeFeatures = (allUserData) => {
+const encodeFeatures = (allUserData, personalUserId) => {
     let uids = [];
     let features= [];
     let index = 0
@@ -49,7 +49,6 @@ const encodeFeatures = (allUserData) => {
         for(const goal in ["Powerlifting", "Bodybuilding", "Weightloss"]){
             features[index].push(userData.PartnerPreferences.Goals.includes(goal) ? 1 : 0);
         }
-    
         index++;
     }
     console.log("encodedFeatures: \n")
