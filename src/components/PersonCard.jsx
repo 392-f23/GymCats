@@ -14,7 +14,6 @@ import CloseIcon from "@mui/icons-material/Close";
 
 function PersonCard({
   person,
-  photoURL,
   handleInterested,
   handleNotInterested,
   showInterestedButtons = true,
@@ -23,18 +22,19 @@ function PersonCard({
   handleClose,
   handleRemoveFriend, // todo: needs to be implemented
 }) {
-  const info = person.personal_info;
+  const info = person.PersonalData;
   const age = info.Age;
-  const experience = info.Experience_Level;
+  const experience = info.ExperienceLevel;
   const goal = info.Goals;
-  const gym = info.Gym_Preference;
+  const gym = info.GymPreference;
   const major = info.Major;
   const school = info.School;
-  const time = info.Usual_Workout_Time;
-  const freq = info.Workout_Frequency;
+  const time = info.UsualWorkoutTime;
+  const freq = info.WorkoutFrequency;
   const gender = info.Gender;
-  const name = info.Name;
-  const id = info.id;
+  const name = person.displayName;
+  const id = person.uid;
+  const photoURL = person.photoURL;
 
   const theme = useTheme();
 
@@ -151,7 +151,7 @@ function PersonCard({
             sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
           >
             <span style={{ fontWeight: 700 }}>Experience Level</span>:{" "}
-            {experience}
+            {experience.charAt(0).toUpperCase() + experience.slice(1)}
           </Typography>
           <Typography
             variant="p"
@@ -197,7 +197,7 @@ function PersonCard({
                 color={theme.palette.text.secondary}
                 sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
               >
-                <span style={{ fontWeight: 700 }}>Gym Preference</span>: {gym}
+                <span style={{ fontWeight: 700 }}>Gym Preference</span>: {gym.join(", ")}
               </Typography>
             </>
           )}
@@ -215,6 +215,25 @@ function PersonCard({
           >
             {showInterestedButtons && (
               <>
+              <Button
+                  sx={{
+                    width: "45%",
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.text.primary,
+                    borderRadius: "40px",
+                    filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary[3],
+                    },
+                  }}
+                  onClick={() => {
+                    handleNotInterested(id)
+                  }}
+                >
+                  <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
+                    Not Interested
+                  </Typography>
+                </Button>
                 <Button
                   sx={{
                     width: "45%",
@@ -226,27 +245,12 @@ function PersonCard({
                       backgroundColor: theme.palette.primary[4],
                     },
                   }}
-                  onClick={() => handleInterested(name, id)}
+                  onClick={() =>{
+                  console.log(`interested person id: ${id}`); 
+                  handleInterested(name, id);}}
                 >
                   <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
                     Interested
-                  </Typography>
-                </Button>
-                <Button
-                  sx={{
-                    width: "45%",
-                    backgroundColor: theme.palette.primary.main,
-                    color: theme.palette.text.primary,
-                    borderRadius: "40px",
-                    filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary[3],
-                    },
-                  }}
-                  onClick={() => handleNotInterested(id)}
-                >
-                  <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
-                    Not Interested
                   </Typography>
                 </Button>
               </>

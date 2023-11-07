@@ -6,8 +6,8 @@ import {
   setDoc,
   updateDoc,
   getDoc,
+  collection,
   arrayUnion,
-  arrayRemove,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -19,13 +19,13 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCheiE1GJdxLHhv5Fb2ur_HN9sP6m3a8Sk",
-  authDomain: "gymcats-4c921.firebaseapp.com",
-  projectId: "gymcats-4c921",
-  storageBucket: "gymcats-4c921.appspot.com",
-  messagingSenderId: "947718356723",
-  appId: "1:947718356723:web:bbcd0a1e16f99dcd034186",
-  measurementId: "G-3THLV2DSEV",
+  apiKey: "AIzaSyCzLs1kyY9QCLjdk7cTXP0NNOYmmRoVl4U",
+  authDomain: "gymbuddy-e9e14.firebaseapp.com",
+  projectId: "gymbuddy-e9e14",
+  storageBucket: "gymbuddy-e9e14.appspot.com",
+  messagingSenderId: "930913179368",
+  appId: "1:930913179368:web:3487a1bc32808655f05b5d",
+  measurementId: "G-ZW2TNBKVSZ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -189,6 +189,16 @@ const fetchUserData = async (uid) => {
   return null;
 };
 
+export const fetchAllData = async () => {
+  const userCol = await collection(db, "users"); 
+  console.log("usrColl: ", userCol); 
+  var userData = {}
+  userCol.forEach(doc => {
+    userData[doc.id] = doc.data(); 
+  });
+  return userData;
+}
+
 export const fetchPersonalData = async () => {
   const uid = localStorage.getItem("uid");
   const userRef = doc(db, "users", uid);
@@ -201,7 +211,7 @@ export const fetchPersonalData = async () => {
 
   return null;
 }
-
+//handlers to update DB for not-interested and interested requests! 
 export const addNotInterested = async (id) => {
   const uid = localStorage.getItem("uid");
   const userRef = doc(db, "users", uid);
@@ -211,7 +221,9 @@ export const addNotInterested = async (id) => {
 }
 
 export const addInterested = async (id) => {
+  console.log("addInterested call")
   const uid = localStorage.getItem("uid");
+  console.log(`id arg: ${id}`)
   const userRef = doc(db, "users", uid);
   await updateDoc(userRef, {
     interested: arrayUnion(id),

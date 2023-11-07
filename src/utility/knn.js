@@ -1,12 +1,12 @@
 //OUR K-Nearest-Neighbors match making algorithm! 
 
-const encodeFeatures = (data) => {
-    let uuids = [];
-    let encodedFeatures= [];
+const encodeFeatures = (allUserData) => {
+    let uids = [];
+    let features= [];
     let index = 0
-    for(const uuid in data) {
-        uuids.push(uuid)
-        var userData = data[uuid];
+    for(const user in allUserData) {
+        uids.push(user.uid)
+        var userData = user;
     //     "PartnerPreferences" : {
     //         "Gender": ["Male"],
     //         "Age": 1356,
@@ -16,9 +16,9 @@ const encodeFeatures = (data) => {
     //         "Goals": ["Powerlifting"],
     //         "GymPreference": "SPAC"
     // }
-        encodeFeatures.push([])
+        features.push([])
         for(const gender in ["Male", "Female", "Nonbinary", "Other"]){
-            encodeFeatures[index].push(userData.Gender.includes(gender) ? 1 : 0)
+            features[index].push(userData.PartnerPreferences.Gender.includes(gender) ? 1 : 0)
         }
         // TODO implement age encoding
         
@@ -31,44 +31,45 @@ const encodeFeatures = (data) => {
                 lowAge = age.split("+")[0]; 
                 highAge = 100; 
             }
-            encodeFeatures[index].push(lowAge <= userData.Age <= highAge ? 1 : 0); 
+            features[index].push(lowAge <= userData.Age <= highAge ? 1 : 0); 
         }
 
         for(const expLevel in ["Beginner (<1 year)", "Intermediate (1-3 years)","Advanced (3-5 years)", "Expert (5+ years)"]){
-            encodeFeatures[index].push(userData.ExperienceLevel.includes(expLevel) ? 1 : 0)
+            features[index].push(userData.PartnerPreferences.ExperienceLevel.includes(expLevel) ? 1 : 0)
         }
         for(const gym in ["SPAC", "Blomquist"]){
-            encodeFeatures[index].push(userData.GymPreference.includes(gym) ? 1 : 0); 
+            features[index].push(userData.PartnerPreferences.GymPreference.includes(gym) ? 1 : 0); 
         }
         for(const freq in ["1", "2", "3", "4", "5", "6", "7"]){
-            encodeFeatures[index].push(userData.WorkoutFrequency.includes(freq) ? 1 : 0); 
+            features[index].push(userData.PartnerPreferences.WorkoutFrequency.includes(freq) ? 1 : 0); 
         }
         for(const time in ["Morning", "Afternoon", "Night"]){
-            encodeFeatures[index].push(userData.UsualWorkoutTime.includes(time) ? 1 : 0);
+            features[index].push(userData.PartnerPreferences.UsualWorkoutTime.includes(time) ? 1 : 0);
         }
         for(const goal in ["Powerlifting", "Bodybuilding", "Weightloss"]){
-            encodeFeatures[index].push(userData.Goals.includes(goal) ? 1 : 0);
+            features[index].push(userData.PartnerPreferences.Goals.includes(goal) ? 1 : 0);
         }
     
         index++;
     }
     console.log("encodedFeatures: \n")
-    console.log(encodedFeatures)
-    return [uuids, encodeFeatures]
+    console.log(features)
+    return [uids, features]
 }
 
-export const computeMatchesBasedOnEncoding = (userData, uuid, N) => {
+export const computeMatchesBasedOnEncoding = (allUserData, personalUserId, N) => {
     ///Output format: [["similarity_dist", "matchid"], ...] => sorted so in home page we can display top N! 
-    const [uuids, encodeFeatures] = encodeFeatures(userData);
-    let UOIIndex = encodeFeatures[uuids.indexOf(uuid)]
-    let distanceVec = []
-    let distance = 0
-    for(let i = 0; i < uuids.length; i++){
-        distance = euclideanDistance(encodeFeatures[i], encodeFeatures[UOIIndex]);
-        distanceVec.push([distance, uuid]);
-    }
-    distanceVec.sort((a, b) => a[0] < b[0]); 
-    const topNMatches = distanceVec.splice(0, N); 
+    const [allUserIds, features] = encodeFeatures(allUserData);
+    let personalUserIdIndex = features[allUserIds.indexOf(personalUserId)]
+    let distances = []
+    allUserIds.forEach((partnerUserId, partnerUserIdIndex) => {
+        if (partnerUserId != personalUserId) {
+            const distance = euclideanDistance(features[personalUserIdIndex], features[partnerUserIdIndex])
+            distances.push([distance, partnerUserId])
+        }
+    })
+    distances.sort((a, b) => a[0] < b[0]); 
+    const topNMatches = distances.splice(0, N); 
     return topNMatches.map(a => a[1]);
 };
 

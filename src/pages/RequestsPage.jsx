@@ -17,17 +17,18 @@ const RequestsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log('useEffect called inside RequestsPage')
     const init = async () => {
       const uid = localStorage.getItem("uid");
       const userInfo = await fetchUserData(uid);
       const { Friends: fetchedFriends, Requests: fetchedRequests } = userInfo;
-
+      console.log("fetchedFriends", fetchedFriends); 
+      console.log("fetchedRequests", fetchedRequests); 
       setFriends(fetchedFriends);
       setFriendRequests(fetchedRequests);
-
       setIsLoading(false);
     };
-
+    //call this async function to get user-specific info about cur state of friends, requests to current logged in user... 
     init();
   }, []);
 

@@ -16,7 +16,6 @@ function PersonModal({ open, onClose, person, photoURL, isFriend = false }) {
     >
       <PersonCard
         person={person}
-        photoURL={photoURL}
         showInterestedButtons={false}
         showRemoveButton={isFriend}
         showExpandedIconButton={false}

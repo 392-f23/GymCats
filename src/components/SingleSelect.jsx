@@ -20,7 +20,7 @@ function SingleSelect({
 }) {
   const theme = useTheme();
   const [selected, setSelected] = useState("");
-  const [firstKey, secondKey] = dbKey
+  const [firstKey, secondKey] = dbKey;
 
   useEffect(() => {
     if (dbState[firstKey][secondKey]) {

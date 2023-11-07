@@ -10,7 +10,8 @@ function TextInput({
   label,
   dbState,
   dbUpdate,
-  dbKey
+  dbKey,
+  type = "number"
 }) {
   const theme = useTheme();
   const [value, setValue] = useState("");
@@ -77,7 +78,7 @@ function TextInput({
               },
             },
           }}
-          type="number"
+          type={type}
         />
       </Grid>
     </Grid>

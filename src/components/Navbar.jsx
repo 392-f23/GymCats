@@ -1,13 +1,26 @@
-import { Box, Button, useTheme } from "@mui/material";
-import React from "react";
+import { Box, Button, styled, useTheme } from "@mui/material";
+import React, { useState } from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import { useNavigate } from "react-router-dom";
 
-function Navbar({ selected, setSelected }) {
+function Navbar({ selected, setSelected, hasMatches = false, hasFriendRequests = false }) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [requestsNotification, setRequestsNotification] = useState(hasFriendRequests);
+  const [homeNotification, setHomeNotification] = useState(hasMatches);
+
+  const NotificationDot = styled(Box)(({ theme }) => ({
+    width: "21px",
+    height: "21px",
+    borderRadius: "50%",
+    backgroundColor: theme.palette.primary[5],
+    filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
+    position: "absolute",
+    top: "-2px",
+    right: "-2px",
+  }));
 
   return (
     <Box
@@ -56,6 +69,7 @@ function Navbar({ selected, setSelected }) {
             filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
           }}
         />
+        {requestsNotification ? (<NotificationDot />) : null}
       </Button>
       <Button
         sx={{
@@ -85,6 +99,7 @@ function Navbar({ selected, setSelected }) {
             filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
           }}
         />
+        {homeNotification ? (<NotificationDot />) : null}
       </Button>
       <Button
         sx={{

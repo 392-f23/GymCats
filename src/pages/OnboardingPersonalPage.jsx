@@ -26,6 +26,7 @@ const OnboardingPersonalPage = ({
   };
 
   const Continue = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     nextStep();
   };
 
@@ -58,6 +59,20 @@ const OnboardingPersonalPage = ({
           <Typography variant="p" sx={{ mb: 4 }}>
             Hi David, please fill out your information!
           </Typography>
+          <MultiSelect 
+            label={"School"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "School"]}
+            options={["WCAS", "SoC", "SESP", "MEAS", "TGS", "Medill", "Pritzker", "Kellogg", "Feinberg", "Bienen"]}
+          />
+          <TextInput
+            label={"Major"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "Major"]}
+            type={"string"}
+          />
           <MultiSelect
             label={"Gender"}
             dbUpdate={updateDB}
@@ -70,6 +85,7 @@ const OnboardingPersonalPage = ({
             dbState={dbState}
             dbUpdate={updateDB}
             dbKey={["PersonalData", "Age"]}
+            type={"number"}
           />
           <SingleSelect
             label={"Experience Level"}
@@ -97,6 +113,14 @@ const OnboardingPersonalPage = ({
             dbState={dbState}
             dbKey={["PersonalData", "UsualWorkoutTime"]}
             options={["Morning", "Afternoon", "Night"]}
+          />
+          <SingleSelect
+            label={"Workout Frequency"}
+            dbUpdate={updateDB}
+            dbState={dbState}
+            dbKey={["PersonalData", "WorkoutFrequency"]}
+            options={["1x/week", "2x/week", "3x/week", "4x/week", "5x/week", "6x/week", "7x/week"]}
+            values={[1, 2, 3, 4, 5, 6, 7]}
           />
           <MultiSelect
             label={"Goals"}

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { StyledDivider } from "../components/StyledDivider";
 import ProfileHeader from "../components/ProfileHeader";
 import Navbar from "../components/Navbar";
+import { handleLogOut } from "../utility/firebase";
 
 const ProfilePage = () => {
   const theme = useTheme();
@@ -15,7 +16,7 @@ const ProfilePage = () => {
       <ProfileHeader />
       <Box
         sx={{
-          height: "calc(100% - 210px)",
+          height: "calc(100% - 300px)",
           padding: "30px 5%",
           display: "flex",
           justifyContent: "space-between",
@@ -54,6 +55,7 @@ const ProfilePage = () => {
                 backgroundColor: theme.palette.primary["warning"],
               },
             }}
+            onClick={() => handleLogOut(navigate)}
           >
             Logout
           </Button>

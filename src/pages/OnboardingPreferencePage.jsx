@@ -24,11 +24,12 @@ const OnboardingPreferencePage = ({
     const formInformation = Object.assign(dbState, {
       Friends: [],
       Requests: [],
-      NotInterested: [],
+      NotInterested: [localStorage.getItem('uid')],
       onboarded: true,
     });
 
     await submitFormInformation(formInformation);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     navigate(0);
   };
 
