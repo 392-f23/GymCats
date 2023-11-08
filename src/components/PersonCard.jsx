@@ -11,6 +11,8 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CloseIcon from "@mui/icons-material/Close";
+import { db, fetchUserData } from "../utility/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 function PersonCard({
   person,
@@ -20,25 +22,39 @@ function PersonCard({
   showRemoveButton = false,
   showExpandedIconButton = true,
   handleClose,
-  handleRemoveFriend, // todo: needs to be implemented
+  refetch,
+  setRefetch,
 }) {
-  const info = person.PersonalData;
-  const age = info.Age;
-  const experience = info.ExperienceLevel;
-  const goal = info.Goals;
-  const gym = info.GymPreference;
-  const major = info.Major;
-  const school = info.School;
-  const time = info.UsualWorkoutTime;
-  const freq = info.WorkoutFrequency;
-  const gender = info.Gender;
-  const name = person.displayName;
-  const id = person.uid;
-  const photoURL = person.photoURL;
+  const { PersonalData: info, photoURL, displayName: name, uid: id } = person;
+  const {
+    Age: age,
+    ExperienceLevel: experience,
+    Goals: goal,
+    GymPreference: gym,
+    Major: major,
+    School: school,
+    UsualWorkoutTime: time,
+    WorkoutFrequency: freq,
+    Gender: gender,
+  } = info;
 
   const theme = useTheme();
-
   const [isExpanded, setIsExpanded] = useState(!showExpandedIconButton);
+
+  const removeFriend = async () => {
+    const uid = localStorage.getItem("uid");
+    const userInfo = await fetchUserData(uid);
+    const { Friends } = userInfo;
+    const newFriends = Friends.filter((friendId) => friendId != id);
+
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, {
+      Friends: newFriends,
+    });
+
+    setRefetch(!refetch);
+    handleClose();
+  };
 
   return (
     <Card
@@ -197,7 +213,8 @@ function PersonCard({
                 color={theme.palette.text.secondary}
                 sx={{ ml: 2, mr: 2, lineHeight: "2rem" }}
               >
-                <span style={{ fontWeight: 700 }}>Gym Preference</span>: {gym.join(", ")}
+                <span style={{ fontWeight: 700 }}>Gym Preference</span>:{" "}
+                {gym.join(", ")}
               </Typography>
             </>
           )}
@@ -215,7 +232,7 @@ function PersonCard({
           >
             {showInterestedButtons && (
               <>
-              <Button
+                <Button
                   sx={{
                     width: "45%",
                     backgroundColor: theme.palette.primary.main,
@@ -227,7 +244,7 @@ function PersonCard({
                     },
                   }}
                   onClick={() => {
-                    handleNotInterested(id)
+                    handleNotInterested(id);
                   }}
                 >
                   <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
@@ -245,9 +262,10 @@ function PersonCard({
                       backgroundColor: theme.palette.primary[4],
                     },
                   }}
-                  onClick={() =>{
-                  console.log(`interested person id: ${id}`); 
-                  handleInterested(name, id);}}
+                  onClick={() => {
+                    console.log(`interested person id: ${id}`);
+                    handleInterested(name, id);
+                  }}
                 >
                   <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
                     Interested
@@ -267,7 +285,7 @@ function PersonCard({
                     backgroundColor: theme.palette.primary[6],
                   },
                 }}
-                onClick={() => handleNotInterested(id)}
+                onClick={() => removeFriend()}
               >
                 Remove Friend
               </Button>

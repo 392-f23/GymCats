@@ -3,7 +3,6 @@ import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import TextInput from "../components/TextInput";
 import Container from "../components/Container";
-import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import { handleLogOut } from "../utility/firebase";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +25,7 @@ const OnboardingPersonalPage = ({
   };
 
   const Continue = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     nextStep();
   };
 
@@ -43,7 +42,7 @@ const OnboardingPersonalPage = ({
           <Typography variant="h1">GymCats</Typography>
           <Box
             component="img"
-            src={photoUrl}
+            src={localStorage.getItem("photoUrl")}
             sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />
         </Box>
@@ -59,12 +58,23 @@ const OnboardingPersonalPage = ({
           <Typography variant="p" sx={{ mb: 4 }}>
             Hi David, please fill out your information!
           </Typography>
-          <MultiSelect 
+          <MultiSelect
             label={"School"}
             dbUpdate={updateDB}
             dbState={dbState}
             dbKey={["PersonalData", "School"]}
-            options={["WCAS", "SoC", "SESP", "MEAS", "TGS", "Medill", "Pritzker", "Kellogg", "Feinberg", "Bienen"]}
+            options={[
+              "WCAS",
+              "SoC",
+              "SESP",
+              "MEAS",
+              "TGS",
+              "Medill",
+              "Pritzker",
+              "Kellogg",
+              "Feinberg",
+              "Bienen",
+            ]}
           />
           <TextInput
             label={"Major"}
@@ -119,7 +129,15 @@ const OnboardingPersonalPage = ({
             dbUpdate={updateDB}
             dbState={dbState}
             dbKey={["PersonalData", "WorkoutFrequency"]}
-            options={["1x/week", "2x/week", "3x/week", "4x/week", "5x/week", "6x/week", "7x/week"]}
+            options={[
+              "1x/week",
+              "2x/week",
+              "3x/week",
+              "4x/week",
+              "5x/week",
+              "6x/week",
+              "7x/week",
+            ]}
             values={[1, 2, 3, 4, 5, 6, 7]}
           />
           <MultiSelect

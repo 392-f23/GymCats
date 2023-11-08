@@ -1,7 +1,14 @@
 import { Modal } from "@mui/material";
 import PersonCard from "./PersonCard";
 
-function PersonModal({ open, onClose, person, photoURL, isFriend = false }) {
+const PersonModal = ({
+  open,
+  onClose,
+  person,
+  isFriend = false,
+  refetch,
+  setRefetch,
+}) => {
   return (
     <Modal
       open={open}
@@ -20,9 +27,11 @@ function PersonModal({ open, onClose, person, photoURL, isFriend = false }) {
         showRemoveButton={isFriend}
         showExpandedIconButton={false}
         handleClose={onClose}
+        refetch={refetch}
+        setRefetch={setRefetch}
       />
     </Modal>
   );
-}
+};
 
 export default PersonModal;

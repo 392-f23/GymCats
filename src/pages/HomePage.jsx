@@ -2,30 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import PersonCard from "../components/PersonCard";
 import Container from "../components/Container";
-// import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
-import { dummyMatches } from "../assets/dummydata";
-import Navbar from "../components/Navbar";
 import { getDocs, collection } from "firebase/firestore";
-import {
-  addNotInterested,
-  addInterested,
-  getNotInterested,
-  fetchAllData,
-  db
-} from "../utility/firebase";
+import { addNotInterested, addInterested, db } from "../utility/firebase";
 import LoadingContainer from "../components/LoadingContainer";
 
 function HomePage() {
   const theme = useTheme();
   const [matches, setMatches] = useState([]);
-  const [selected, setSelected] = useState("home");
   const [notInterested, setNotInterested] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(`matches state: `, matches); 
 
   const handleNotInterested = (id) => {
-    alert(`We have sent a notification to person with id: ${id} that you are't interested!`); 
+    alert(
+      `We have sent a notification to person with id: ${id} that you are't interested!`
+    );
     addNotInterested(id);
     setMatches(matches.filter((match) => match.personal_info.id !== id));
   };
@@ -34,10 +25,9 @@ function HomePage() {
     alert(
       "We have sent a notification to " + name + " that you are interested!"
     );
-    console.log(`inside handleInterested id value: ${id}`); 
+    console.log(`inside handleInterested id value: ${id}`);
     addInterested(id);
   };
-
 
   useEffect(() => {
     const init = async () => {
@@ -51,21 +41,29 @@ function HomePage() {
         const { onboarded } = tempObject;
 
         if (onboarded) {
-          tempUsers.push(Object.assign(tempObject, { uid: document.id}));
+          tempUsers.push(Object.assign(tempObject, { uid: document.id }));
         }
       });
-      //don't want own card to show up! 
-      setMatches(tempUsers.filter(tu => {
-        return tu.uid !== localStorage.getItem('uid')
-      }));
+      //don't want own card to show up!
+      setMatches(
+        tempUsers.filter((tu) => {
+          return tu.uid !== localStorage.getItem("uid");
+        })
+      );
       setIsLoading(false);
     };
     init();
   }, []);
-  
+
   return (
     <LoadingContainer isLoading={isLoading}>
-      <Box sx={{ backgroundColor: theme.palette.primary[1], minHeight: "100%", height: "100%" }}>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.primary[1],
+          minHeight: "100%",
+          height: "100%",
+        }}
+      >
         <Container>
           <Box
             sx={{
@@ -77,7 +75,7 @@ function HomePage() {
             <Typography variant="h1">GymCats</Typography>
             <Box
               component="img"
-              src={localStorage.getItem('photoUrl')}
+              src={localStorage.getItem("photoUrl")}
               sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
             />
           </Box>
@@ -109,7 +107,6 @@ function HomePage() {
           </Box>
           <Box sx={{ width: "100%", height: "100px" }} />
         </Container>
-        <Navbar selected={selected} setSelected={setSelected} hasMatches={matches.length > 0} />
       </Box>
     </LoadingContainer>
   );

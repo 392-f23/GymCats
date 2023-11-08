@@ -2,7 +2,6 @@ import { Box, Typography, Button, useTheme } from "@mui/material";
 import MultiSelect from "../components/MultiSelect";
 import SingleSelect from "../components/SingleSelect";
 import Container from "../components/Container";
-import photoUrl from "../assets/profile.jpeg";
 import submitFormInformation from "../utility/firebase";
 import { StyledDivider } from "../components/StyledDivider";
 import { useNavigate } from "react-router-dom";
@@ -24,12 +23,13 @@ const OnboardingPreferencePage = ({
     const formInformation = Object.assign(dbState, {
       Friends: [],
       Requests: [],
-      NotInterested: [localStorage.getItem('uid')],
+      SentRequests: [],
+      NotInterested: [localStorage.getItem("uid")],
       onboarded: true,
     });
 
     await submitFormInformation(formInformation);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     navigate(0);
   };
 
@@ -46,7 +46,7 @@ const OnboardingPreferencePage = ({
           <Typography variant="h1">GymCats</Typography>
           <Box
             component="img"
-            src={photoUrl}
+            src={localStorage.getItem("photoUrl")}
             sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />
         </Box>

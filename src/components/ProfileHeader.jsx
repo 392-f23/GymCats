@@ -1,5 +1,4 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import photoUrl from "../assets/profile.jpeg";
 
 const ProfileHeader = () => {
   const theme = useTheme();
@@ -25,7 +24,7 @@ const ProfileHeader = () => {
       >
         <Box
           component="img"
-          src={localStorage.getItem('photoUrl')}
+          src={localStorage.getItem("photoUrl")}
           sx={{
             width: "40px",
             height: "40px",
@@ -33,7 +32,9 @@ const ProfileHeader = () => {
             marginRight: "10px",
           }}
         />
-        <Typography variant="h5">Welcome Back, {localStorage.getItem('name')}!</Typography>
+        <Typography variant="h5">
+          Welcome Back, {localStorage.getItem("name")}!
+        </Typography>
       </Box>
     </Box>
   );

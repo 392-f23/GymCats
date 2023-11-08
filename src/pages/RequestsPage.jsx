@@ -1,36 +1,88 @@
 import { Box, Divider, Typography, useTheme } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Container from "../components/Container";
-import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import FriendCard from "../components/FriendCard";
 import FriendRequestCard from "../components/FriendRequestCard";
-import Navbar from "../components/Navbar";
 import LoadingContainer from "../components/LoadingContainer";
-import { fetchUserData } from "../utility/firebase";
+import { fetchUserData, db } from "../utility/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const RequestsPage = () => {
   const theme = useTheme();
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
-  const [selected, setSelected] = useState("requests");
   const [isLoading, setIsLoading] = useState(true);
+  const [reload, setReload] = useState(false);
+  const [refetch, setRefetch] = useState(false);
+
+  const uid = localStorage.getItem("uid");
 
   useEffect(() => {
-    console.log('useEffect called inside RequestsPage')
     const init = async () => {
-      const uid = localStorage.getItem("uid");
       const userInfo = await fetchUserData(uid);
-      const { Friends: fetchedFriends, Requests: fetchedRequests } = userInfo;
-      console.log("fetchedFriends", fetchedFriends); 
-      console.log("fetchedRequests", fetchedRequests); 
-      setFriends(fetchedFriends);
-      setFriendRequests(fetchedRequests);
+      const { Friends: friendUids, Requests: requestUids } = userInfo;
+
+      const friendPromises = [];
+      friendUids.forEach((friendUid) => {
+        friendPromises.push(
+          new Promise(async function (resolve, reject) {
+            const requestData = await fetchUserData(friendUid);
+            resolve(requestData);
+          })
+        );
+      });
+
+      const tempFriends = [];
+
+      if (friendPromises.length > 0) {
+        await Promise.all(friendPromises).then((userData) => {
+          const [user] = userData;
+          tempFriends.push(user);
+        });
+      }
+
+      const requestPromises = [];
+      requestUids.forEach((requestUid) => {
+        requestPromises.push(
+          new Promise(async function (resolve, reject) {
+            const requestData = await fetchUserData(requestUid);
+            resolve(requestData);
+          })
+        );
+      });
+
+      const tempRequests = [];
+      if (requestPromises.length > 0) {
+        await Promise.all(requestPromises).then((userData) => {
+          const [user] = userData;
+          tempRequests.push(user);
+        });
+      }
+
+      setFriends(tempFriends);
+      setFriendRequests(tempRequests);
       setIsLoading(false);
+      setReload(false);
     };
-    //call this async function to get user-specific info about cur state of friends, requests to current logged in user... 
     init();
-  }, []);
+  }, [refetch]);
+
+  useEffect(() => {
+    if (reload) {
+      setRefetch(!refetch);
+    }
+  }, [reload]);
+
+  const requestListener = onSnapshot(doc(db, "users", uid), (doc) => {
+    const data = doc.data();
+    const { Requests } = data;
+    const prevRequestLength = localStorage.getItem("prevRequestLength") || -1;
+
+    if (prevRequestLength != -1 && Requests.length > prevRequestLength) {
+      setReload(true);
+    }
+  });
 
   return (
     <LoadingContainer isLoading={isLoading}>
@@ -48,7 +100,7 @@ const RequestsPage = () => {
             <Typography variant="h1">GymCats</Typography>
             <Box
               component="img"
-              src={photoUrl}
+              src={localStorage.getItem("photoUrl")}
               sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
             />
           </Box>
@@ -72,7 +124,12 @@ const RequestsPage = () => {
           >
             {friends.map((match, index) => (
               <>
-                <FriendCard key={index} person={match} photoURL={photoUrl} />
+                <FriendCard
+                  key={index}
+                  person={match}
+                  refetch={refetch}
+                  setRefetch={setRefetch}
+                />
                 {index < friends.length - 1 && (
                   <Divider
                     sx={{
@@ -107,12 +164,12 @@ const RequestsPage = () => {
               <FriendRequestCard
                 key={index}
                 person={match}
-                photoURL={photoUrl}
+                refetch={refetch}
+                setRefetch={setRefetch}
               />
             ))}
           </Box>
         </Container>
-        <Navbar selected={selected} setSelected={setSelected} />
       </Box>
     </LoadingContainer>
   );

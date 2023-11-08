@@ -1,15 +1,55 @@
+import React, { useEffect, useState } from "react";
 import { Box, Button, styled, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../utility/firebase";
+import { useLocation } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import { useNavigate } from "react-router-dom";
 
-function Navbar({ selected, setSelected, hasMatches = false, hasFriendRequests = false }) {
+function Navbar({ hasMatches = false }) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [requestsNotification, setRequestsNotification] = useState(hasFriendRequests);
+  const [hasFriendRequests, setHasFriendRequests] = useState(false);
   const [homeNotification, setHomeNotification] = useState(hasMatches);
+  const [selected, setSelected] = useState();
+  const location = useLocation();
+  const { pathname } = location;
+
+  const uid = localStorage.getItem("uid");
+
+  onSnapshot(doc(db, "users", uid), (doc) => {
+    const data = doc.data();
+    const { Requests } = data;
+    const prevRequestLength = localStorage.getItem("prevRequestLength") || -1;
+
+    if (
+      prevRequestLength != -1 &&
+      Requests.length > prevRequestLength &&
+      !pathname.includes("requests")
+    ) {
+      setHasFriendRequests(true);
+    }
+  });
+
+  useEffect(() => {
+    const init = () => {
+      if (pathname.includes("requests")) {
+        setSelected("requests");
+        setHasFriendRequests(false);
+      }
+
+      if (pathname.includes("home")) {
+        setSelected("home");
+      }
+
+      if (pathname.includes("profile")) {
+        setSelected("profile");
+      }
+    };
+    init();
+  }, [pathname]);
 
   const NotificationDot = styled(Box)(({ theme }) => ({
     width: "21px",
@@ -54,10 +94,10 @@ function Navbar({ selected, setSelected, hasMatches = false, hasFriendRequests =
                 : theme.palette.primary[3],
           },
         }}
-        onClick={() => 
-          {setSelected("requests");
-          navigate("/requests")}
-        }
+        onClick={() => {
+          setSelected("requests");
+          navigate("/requests");
+        }}
       >
         <EmailOutlinedIcon
           sx={{
@@ -69,7 +109,7 @@ function Navbar({ selected, setSelected, hasMatches = false, hasFriendRequests =
             filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
           }}
         />
-        {requestsNotification ? (<NotificationDot />) : null}
+        {hasFriendRequests ? <NotificationDot /> : null}
       </Button>
       <Button
         sx={{
@@ -99,7 +139,7 @@ function Navbar({ selected, setSelected, hasMatches = false, hasFriendRequests =
             filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",
           }}
         />
-        {homeNotification ? (<NotificationDot />) : null}
+        {homeNotification ? <NotificationDot /> : null}
       </Button>
       <Button
         sx={{

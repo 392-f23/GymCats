@@ -12,13 +12,46 @@ import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PersonModal from "./PersonModal";
 import { useState } from "react";
+import { db, fetchUserData } from "../utility/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
-function FriendRequestCard({ person, photoURL }) {
+function FriendRequestCard({ person, refetch, setRefetch }) {
   const theme = useTheme();
   const [personModalOpen, setPersonModalOpen] = useState(false);
+  const { displayName, photoURL, uid: requestUid } = person;
 
   const handlePersonModalOpen = () => setPersonModalOpen(true);
   const handlePersonModalClose = () => setPersonModalOpen(false);
+
+  const sendFriendRequest = async () => {
+    const uid = localStorage.getItem("uid");
+    const userInfo = await fetchUserData(uid);
+    const { Requests, Friends } = userInfo;
+    const newRequests = Requests.filter((requestId) => requestId != requestUid);
+    Friends.push(requestUid);
+
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, {
+      Requests: newRequests,
+      Friends,
+    });
+
+    setRefetch(!refetch);
+  };
+
+  const removeFriendRequest = async () => {
+    const uid = localStorage.getItem("uid");
+    const userInfo = await fetchUserData(uid);
+    const { Requests } = userInfo;
+
+    const newRequests = Requests.filter((requestId) => requestId != requestUid);
+    const userRef = doc(db, "users", uid);
+
+    await updateDoc(userRef, {
+      Requests: newRequests,
+    });
+    setRefetch(!refetch);
+  };
 
   return (
     <>
@@ -72,7 +105,7 @@ function FriendRequestCard({ person, photoURL }) {
                 color={theme.palette.text.secondary}
                 sx={{ textAlign: "center" }}
               >
-                {person.personal_info.Name}
+                {displayName}
               </Typography>
               <Box
                 sx={{
@@ -95,6 +128,7 @@ function FriendRequestCard({ person, photoURL }) {
                       backgroundColor: theme.palette.primary[3],
                     },
                   }}
+                  onClick={() => sendFriendRequest()}
                 >
                   <CheckIcon sx={{ color: theme.palette.text.secondary }} />
                 </Button>
@@ -107,6 +141,7 @@ function FriendRequestCard({ person, photoURL }) {
                       backgroundColor: theme.palette.primary[4],
                     },
                   }}
+                  onClick={() => removeFriendRequest()}
                 >
                   <CloseIcon sx={{ color: theme.palette.text.primary }} />
                 </Button>
