@@ -4,20 +4,22 @@ import Container from "../components/Container";
 import { StyledDivider } from "../components/StyledDivider";
 import FriendCard from "../components/FriendCard";
 import FriendRequestCard from "../components/FriendRequestCard";
-import Navbar from "../components/Navbar";
 import LoadingContainer from "../components/LoadingContainer";
-import { fetchUserData } from "../utility/firebase";
+import { fetchUserData, db } from "../utility/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const RequestsPage = () => {
   const theme = useTheme();
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
-  const [selected, setSelected] = useState("requests");
   const [isLoading, setIsLoading] = useState(true);
+  const [reload, setReload] = useState(false);
+  const [refetch, setRefetch] = useState(false);
+
+  const uid = localStorage.getItem("uid");
 
   useEffect(() => {
     const init = async () => {
-      const uid = localStorage.getItem("uid");
       const userInfo = await fetchUserData(uid);
       const { Friends: friendUids, Requests: requestUids } = userInfo;
 
@@ -51,7 +53,6 @@ const RequestsPage = () => {
       });
 
       const tempRequests = [];
-
       if (requestPromises.length > 0) {
         await Promise.all(requestPromises).then((userData) => {
           const [user] = userData;
@@ -61,11 +62,27 @@ const RequestsPage = () => {
 
       setFriends(tempFriends);
       setFriendRequests(tempRequests);
-
       setIsLoading(false);
+      setReload(false);
     };
     init();
-  }, []);
+  }, [refetch]);
+
+  useEffect(() => {
+    if (reload) {
+      setRefetch(!refetch);
+    }
+  }, [reload]);
+
+  const requestListener = onSnapshot(doc(db, "users", uid), (doc) => {
+    const data = doc.data();
+    const { Requests } = data;
+    const prevRequestLength = localStorage.getItem("prevRequestLength") || -1;
+
+    if (prevRequestLength != -1 && Requests.length > prevRequestLength) {
+      setReload(true);
+    }
+  });
 
   return (
     <LoadingContainer isLoading={isLoading}>
@@ -143,7 +160,6 @@ const RequestsPage = () => {
             ))}
           </Box>
         </Container>
-        <Navbar selected={selected} setSelected={setSelected} />
       </Box>
     </LoadingContainer>
   );

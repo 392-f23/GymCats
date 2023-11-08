@@ -45,10 +45,6 @@ const useAuthState = () => {
 };
 
 const handleLogin = async (navigate) => {
-  console.log("auth: ");
-  console.log(auth);
-  console.log("provider: ");
-  console.log(provider);
   signInWithPopup(auth, provider)
     .then(async (result) => {
       const user = result.user;
@@ -87,6 +83,7 @@ const handleLogOut = (navigate) => {
 
   localStorage.removeItem("PersonalData");
   localStorage.removeItem("PartnerPreferences");
+  localStorage.removeItem("prevRequestLength");
   navigate(0);
 };
 
@@ -183,8 +180,14 @@ const updatePersonalInfo = async (dbState) => {
 const fetchUserData = async (uid) => {
   const userRef = doc(db, "users", uid);
   const snapshot = await getDoc(userRef);
+
   if (snapshot.exists()) {
     const data = await snapshot.data();
+
+    if (uid === localStorage.getItem("uid")) {
+      localStorage.setItem("prevRequestLength", data.Requests.length);
+    }
+
     return Object.assign(data, { uid: snapshot.id });
   }
 
@@ -228,12 +231,12 @@ export const addInterested = async (id) => {
   console.log(`id arg: ${id}`);
   const userRef = doc(db, "users", uid);
   await updateDoc(userRef, {
-    Requests: arrayUnion(id),
+    SentRequests: arrayUnion(id),
   });
 
   const userRef2 = doc(db, "users", id);
   await updateDoc(userRef2, {
-    requests: arrayUnion(uid),
+    Requests: arrayUnion(uid),
   });
 };
 

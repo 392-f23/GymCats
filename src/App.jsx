@@ -11,18 +11,24 @@ import {
   isOnboarded as checkIfOnboarded,
 } from "./utility/firebase";
 import LoadingContainer from "./components/LoadingContainer";
-import "./App.css";
 import ProfilePage from "./pages/ProfilePage";
 import EditPersonalPage from "./pages/EditPersonalPage";
 import EditPreferencePage from "./pages/EditPreferencePage";
+import Navbar from "./components/Navbar";
+import "./App.css";
 
 const privateRoutes = [
-  // { path: "/onboarding", component: () => <FormPage /> },
   { path: "/home", component: () => <HomePage /> },
-  { path: "/requests", component: () => <RequestsPage /> },
+  {
+    path: "/requests",
+    component: () => <RequestsPage />,
+  },
   { path: "/profile", component: () => <ProfilePage /> },
   { path: "/profile/edit/personal", component: () => <EditPersonalPage /> },
-  { path: "/profile/edit/preference", component: () => <EditPreferencePage /> },
+  {
+    path: "/profile/edit/preference",
+    component: () => <EditPreferencePage />,
+  },
 ];
 
 const publicRoutes = [{ path: "/login", component: () => <LoginPage /> }];
@@ -105,6 +111,7 @@ function App() {
               />
             ))}
           </Routes>
+          <Navbar />
         </BrowserRouter>
       </ThemeProvider>
     </LoadingContainer>

@@ -23,6 +23,7 @@ const OnboardingPreferencePage = ({
     const formInformation = Object.assign(dbState, {
       Friends: [],
       Requests: [],
+      SentRequests: [],
       NotInterested: [localStorage.getItem("uid")],
       onboarded: true,
     });
