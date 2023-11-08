@@ -15,11 +15,10 @@ import { useState } from "react";
 import { db, fetchUserData } from "../utility/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
-function FriendRequestCard({ person }) {
+function FriendRequestCard({ person, refetch, setRefetch }) {
   const theme = useTheme();
   const [personModalOpen, setPersonModalOpen] = useState(false);
   const { displayName, photoURL, uid: requestUid } = person;
-  console.log("person", person);
 
   const handlePersonModalOpen = () => setPersonModalOpen(true);
   const handlePersonModalClose = () => setPersonModalOpen(false);
@@ -36,9 +35,23 @@ function FriendRequestCard({ person }) {
       Requests: newRequests,
       Friends,
     });
+
+    setRefetch(!refetch);
   };
 
-  const removeFriendRequest = async () => {};
+  const removeFriendRequest = async () => {
+    const uid = localStorage.getItem("uid");
+    const userInfo = await fetchUserData(uid);
+    const { Requests } = userInfo;
+
+    const newRequests = Requests.filter((requestId) => requestId != requestUid);
+    const userRef = doc(db, "users", uid);
+
+    await updateDoc(userRef, {
+      Requests: newRequests,
+    });
+    setRefetch(!refetch);
+  };
 
   return (
     <>

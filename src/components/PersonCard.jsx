@@ -22,6 +22,8 @@ function PersonCard({
   showRemoveButton = false,
   showExpandedIconButton = true,
   handleClose,
+  refetch,
+  setRefetch,
 }) {
   const { PersonalData: info, photoURL, displayName: name, uid: id } = person;
   const {
@@ -49,6 +51,9 @@ function PersonCard({
     await updateDoc(userRef, {
       Friends: newFriends,
     });
+
+    setRefetch(!refetch);
+    handleClose();
   };
 
   return (

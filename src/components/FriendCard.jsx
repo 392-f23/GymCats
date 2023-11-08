@@ -5,7 +5,7 @@ import PersonModal from "../components/PersonModal";
 import ContactModal from "../components/ContactModal";
 import { useState } from "react";
 
-function FriendCard({ person }) {
+const FriendCard = ({ person, refetch, setRefetch }) => {
   const theme = useTheme();
   const [personModalOpen, setPersonModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
@@ -77,8 +77,9 @@ function FriendCard({ person }) {
         open={personModalOpen}
         onClose={handlePersonModalClose}
         person={person}
-        photoURL={photoURL}
         isFriend={true}
+        refetch={refetch}
+        setRefetch={setRefetch}
       />
       <ContactModal
         open={contactModalOpen}
@@ -88,6 +89,6 @@ function FriendCard({ person }) {
       />
     </>
   );
-}
+};
 
 export default FriendCard;

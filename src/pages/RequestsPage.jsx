@@ -124,7 +124,12 @@ const RequestsPage = () => {
           >
             {friends.map((match, index) => (
               <>
-                <FriendCard key={index} person={match} />
+                <FriendCard
+                  key={index}
+                  person={match}
+                  refetch={refetch}
+                  setRefetch={setRefetch}
+                />
                 {index < friends.length - 1 && (
                   <Divider
                     sx={{
@@ -156,7 +161,12 @@ const RequestsPage = () => {
             }}
           >
             {friendRequests.map((match, index) => (
-              <FriendRequestCard key={index} person={match} />
+              <FriendRequestCard
+                key={index}
+                person={match}
+                refetch={refetch}
+                setRefetch={setRefetch}
+              />
             ))}
           </Box>
         </Container>
