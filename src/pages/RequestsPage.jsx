@@ -1,7 +1,6 @@
 import { Box, Divider, Typography, useTheme } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Container from "../components/Container";
-import photoUrl from "../assets/profile.jpeg";
 import { StyledDivider } from "../components/StyledDivider";
 import FriendCard from "../components/FriendCard";
 import FriendRequestCard from "../components/FriendRequestCard";
