@@ -31,7 +31,11 @@ const EditPreferencePage = () => {
 
   return (
     <LoadingContainer isLoading={isLoading}>
-      <Box sx={{ backgroundColor: theme.palette.primary[1] }}>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.primary[1],
+        }}
+      >
         <ProfileHeader />
         <Box>
           <Container>
@@ -91,6 +95,7 @@ const EditPreferencePage = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                marginBottom: "100px",
               }}
             >
               <Button

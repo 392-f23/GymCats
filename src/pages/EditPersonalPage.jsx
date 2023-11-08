@@ -88,6 +88,7 @@ const EditPersonalPage = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                marginBottom: "100px",
               }}
             >
               <Button
