@@ -12,14 +12,33 @@ import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PersonModal from "./PersonModal";
 import { useState } from "react";
+import { db, fetchUserData } from "../utility/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 function FriendRequestCard({ person }) {
   const theme = useTheme();
   const [personModalOpen, setPersonModalOpen] = useState(false);
-  const { displayName, photoURL } = person;
+  const { displayName, photoURL, uid: requestUid } = person;
+  console.log("person", person);
 
   const handlePersonModalOpen = () => setPersonModalOpen(true);
   const handlePersonModalClose = () => setPersonModalOpen(false);
+
+  const sendFriendRequest = async () => {
+    const uid = localStorage.getItem("uid");
+    const userInfo = await fetchUserData(uid);
+    const { Requests, Friends } = userInfo;
+    const newRequests = Requests.filter((requestId) => requestId != requestUid);
+    Friends.push(requestUid);
+
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, {
+      Requests: newRequests,
+      Friends,
+    });
+  };
+
+  const removeFriendRequest = async () => {};
 
   return (
     <>
@@ -96,6 +115,7 @@ function FriendRequestCard({ person }) {
                       backgroundColor: theme.palette.primary[3],
                     },
                   }}
+                  onClick={() => sendFriendRequest()}
                 >
                   <CheckIcon sx={{ color: theme.palette.text.secondary }} />
                 </Button>
@@ -108,6 +128,7 @@ function FriendRequestCard({ person }) {
                       backgroundColor: theme.palette.primary[4],
                     },
                   }}
+                  onClick={() => removeFriendRequest()}
                 >
                   <CloseIcon sx={{ color: theme.palette.text.primary }} />
                 </Button>

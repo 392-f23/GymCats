@@ -5,10 +5,12 @@ import PersonModal from "../components/PersonModal";
 import ContactModal from "../components/ContactModal";
 import { useState } from "react";
 
-function FriendCard({ person, photoURL }) {
+function FriendCard({ person }) {
   const theme = useTheme();
   const [personModalOpen, setPersonModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
+
+  const { displayName, photoURL } = person;
 
   const handlePersonModalOpen = () => setPersonModalOpen(true);
   const handlePersonModalClose = () => setPersonModalOpen(false);
@@ -39,7 +41,7 @@ function FriendCard({ person, photoURL }) {
             src={photoURL}
             sx={{ width: "50px", height: "50px", borderRadius: "50%", mr: 1 }}
           />
-          <Typography variant="h6">{person.personal_info.Name}</Typography>
+          <Typography variant="h6">{displayName}</Typography>
         </Box>
         <Box>
           <IconButton

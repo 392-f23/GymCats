@@ -185,7 +185,7 @@ const fetchUserData = async (uid) => {
   const snapshot = await getDoc(userRef);
   if (snapshot.exists()) {
     const data = await snapshot.data();
-    return data;
+    return Object.assign(data, { uid: snapshot.id });
   }
 
   return null;

@@ -108,7 +108,7 @@ const RequestsPage = () => {
           >
             {friends.map((match, index) => (
               <>
-                <FriendCard key={index} person={match} photoURL={photoUrl} />
+                <FriendCard key={index} person={match} />
                 {index < friends.length - 1 && (
                   <Divider
                     sx={{

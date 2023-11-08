@@ -74,10 +74,10 @@ function ContactModal({ open, onClose, person, photoURL }) {
               }}
             >
               <Typography variant="h5" color={theme.palette.text.secondary}>
-                {person.personal_info.Name}
+                {person.displayName}
               </Typography>
               <Typography variant="p" color={theme.palette.text.secondary}>
-                {person.personal_info.School} | {person.personal_info.Major}
+                {person.PersonalData.School} | {person.PersonalData.Major}
               </Typography>
             </Box>
             <IconButton
@@ -112,12 +112,8 @@ function ContactModal({ open, onClose, person, photoURL }) {
                 mr: 2,
               }}
             />
-            <Link
-              href={`mailto:${person.personal_info.Email}`}
-              variant="a"
-              component="a"
-            >
-              {person.personal_info.Email}
+            <Link href={`mailto:${person.email}`} variant="a" component="a">
+              {person.email}
             </Link>
           </Box>
         </CardContent>
