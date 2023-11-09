@@ -60,14 +60,8 @@ function HomePage() {
         setNotInterested(listOfUnwantedUID); 
       }
 
-      // todo: Change this to getNaiveMatches
-      getNaiveMatches(await allData, curUserID);
-      //don't want own card to show up and the card should not be "unwanted"!
-      setMatches(
-        tempUsers.filter((tu) => {
-          return tu.uid !== localStorage.getItem("uid") && listOfUnwantedUID.indexOf(tu.uid) === -1 ;
-        })
-      );
+      const naiveMatches = getNaiveMatches(await fetchAllData(), curUserID);
+      setMatches(naiveMatches);
       setIsLoading(false);
     };
     init();
