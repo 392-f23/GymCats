@@ -12,8 +12,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PersonModal from "./PersonModal";
 import { useState } from "react";
-import { db, fetchUserData } from "../utility/firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { db, fetchUserData} from "../utility/firebase";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 
 function FriendRequestCard({ person, refetch, setRefetch }) {
   const theme = useTheme();
@@ -27,29 +27,48 @@ function FriendRequestCard({ person, refetch, setRefetch }) {
     const uid = localStorage.getItem("uid");
     const userInfo = await fetchUserData(uid);
     const { Requests, Friends } = userInfo;
+    //only keep remaining requests that did not get selected! 
     const newRequests = Requests.filter((requestId) => requestId != requestUid);
     Friends.push(requestUid);
-
     const userRef = doc(db, "users", uid);
+    //update logged in user doc since new friend is made! 
     await updateDoc(userRef, {
       Requests: newRequests,
       Friends,
     });
-
+    //the other friend should also add my uid to their friend list as well! 
+    const otherRef = doc(db, "users", requestUid);
+    const otherDoc = await getDoc(otherRef); 
+    const otherFriends = otherDoc.data()["Friends"]; 
+    const newFriends = [...otherFriends, uid]; 
+    await updateDoc(otherRef, {
+      Friends: newFriends, 
+    }); 
     setRefetch(!refetch);
   };
 
   const removeFriendRequest = async () => {
     const uid = localStorage.getItem("uid");
     const userInfo = await fetchUserData(uid);
+    //get cur state of requests for user! 
     const { Requests } = userInfo;
-
+    //remove the request that logged in user just rejected! 
     const newRequests = Requests.filter((requestId) => requestId != requestUid);
     const userRef = doc(db, "users", uid);
 
     await updateDoc(userRef, {
       Requests: newRequests,
     });
+
+    //probably want to nullify the logged-in user id by removing it from "SentRequests" field of database document 
+    //corresponding to the other user => in other words, the other user's sent request is void due to rejection! 
+    const otherInfo = await fetchUserData(requestUid); 
+    const {SentRequests} = otherInfo;
+    const newOtherSentRequests = SentRequests.filter(sr => sr !== uid); 
+    const otherRef = doc(db, "users", requestUid); 
+    await updateDoc(otherRef, {
+      SentRequests: newOtherSentRequests
+    }); 
     setRefetch(!refetch);
   };
 

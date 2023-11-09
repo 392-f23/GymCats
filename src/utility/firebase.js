@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   doc,
+  getDocs,
   setDoc,
   updateDoc,
   getDoc,
@@ -195,8 +196,7 @@ const fetchUserData = async (uid) => {
 };
 
 export const fetchAllData = async () => {
-  const userCol = await collection(db, "users");
-  console.log("usrColl: ", userCol);
+  const userCol = await getDocs(collection(db, "users"));
   var userData = {};
   userCol.forEach((doc) => {
     userData[doc.id] = doc.data();
@@ -215,7 +215,8 @@ export const fetchPersonalData = async () => {
 
   return null;
 };
-//handlers to update DB for not-interested and interested requests!
+
+// handlers to update DB for not-interested and interested requests!
 export const addNotInterested = async (id) => {
   const uid = localStorage.getItem("uid");
   const userRef = doc(db, "users", uid);

@@ -33,6 +33,12 @@ function Navbar({ hasMatches = false }) {
     }
   });
 
+  // onSnapshot(doc (db, "users", uid), (doc) => {
+  //   const data = doc.data();
+  //   const { Matches } = data;
+  //   const 
+  // });
+
   useEffect(() => {
     const init = () => {
       if (pathname.includes("requests")) {
