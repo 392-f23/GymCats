@@ -15,7 +15,6 @@ const RequestsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(false);
   const [refetch, setRefetch] = useState(false);
-  console.log(`friendRequests: `, friendRequests); 
   const uid = localStorage.getItem("uid");
 
   useEffect(() => {
@@ -41,33 +40,29 @@ const RequestsPage = () => {
           tempFriends.push(user);
         });
       }
-      console.log("requestUIDs: \n")
-      console.log(requestUids); 
+
       const requestPromises = [];
       requestUids.forEach((requestUid) => {
         requestPromises.push(
           new Promise(async function (resolve, reject) {
             const requestData = await fetchUserData(requestUid);
-            console.log(`resolved data about this user with request id ${requestUid}: \n`)
-            console.log(requestData); 
             resolve(requestData);
           })
         );
       });
 
       const tempRequests = [];
-      //if there is at least 1 request received... 
+      //if there is at least 1 request received...
       if (requestPromises.length > 0) {
         await Promise.all(requestPromises).then((userData) => {
           //this resolved userDAta is array of resolved promise objs => each obj describing a user that sent request to the logged in
-          //user! 
-          userData.forEach(ud => {
+          //user!
+          userData.forEach((ud) => {
             tempRequests.push(ud);
-          })
+          });
         });
       }
-      console.log("tempRequests: \n")
-      console.log(tempRequests)
+
       setFriends(tempFriends);
       setFriendRequests(tempRequests);
       setIsLoading(false);

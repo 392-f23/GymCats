@@ -165,7 +165,6 @@ const isOnboarded = async () => {
 };
 
 const submitFormInformation = async (dbState) => {
-  console.log(dbState);
   const uid = localStorage.getItem("uid");
   const userDocRef = doc(db, "users", uid);
   await setDoc(userDocRef, dbState, { merge: true });
@@ -227,9 +226,7 @@ export const addNotInterested = async (id) => {
 
 // TODO: Remove from homepage after sending interested request
 export const addInterested = async (id) => {
-  console.log("addInterested call");
   const uid = localStorage.getItem("uid");
-  console.log(`id arg: ${id}`);
   const userRef = doc(db, "users", uid);
   await updateDoc(userRef, {
     SentRequests: arrayUnion(id),

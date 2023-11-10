@@ -4,36 +4,42 @@ import PersonCard from "../components/PersonCard";
 import Container from "../components/Container";
 import { StyledDivider } from "../components/StyledDivider";
 import { getDocs, collection, getDoc, doc } from "firebase/firestore";
-import { addNotInterested, addInterested, db, fetchAllData } from "../utility/firebase";
+import {
+  addNotInterested,
+  addInterested,
+  db,
+  fetchAllData,
+} from "../utility/firebase";
 import LoadingContainer from "../components/LoadingContainer";
 import { getNaiveMatches } from "../utility/naiveMatch";
 
 function HomePage() {
   const theme = useTheme();
-  const curUserID = localStorage.getItem("uid"); 
+  const curUserID = localStorage.getItem("uid");
   const [matches, setMatches] = useState([]);
-  //array of uids for current user that is not interested! 
+  //array of uids for current user that is not interested!
   const [notInterested, setNotInterested] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [allData, setAllData] = useState({});
 
   const handleNotInterested = (id) => {
-    alert(`We have sent a notification to person with id: ${id} that you are't interested!`);
-    //this call does update the DB! 
+    alert(
+      `We have sent a notification to person with id: ${id} that you are't interested!`
+    );
+    //this call does update the DB!
     addNotInterested(id);
-    //we still might want the state to be in sync with db state! Tack on the new id val! 
-    setNotInterested((prev) => [...prev, id]); 
+    //we still might want the state to be in sync with db state! Tack on the new id val!
+    setNotInterested((prev) => [...prev, id]);
   };
 
   const handleInterested = (name, id) => {
     alert(
       "We have sent a notification to " + name + " that you are interested!"
     );
-    console.log(`inside handleInterested id value: ${id}`);
-    //makes call to firebase utility function => will modify interested field of database doc on back-end! 
+    //makes call to firebase utility function => will modify interested field of database doc on back-end!
     addInterested(id);
   };
-  //every time component renders, we want to set not interseted based on the document's latest info! 
+  //every time component renders, we want to set not interseted based on the document's latest info!
   useEffect(() => {
     const init = async () => {
       setIsLoading(true);
@@ -50,14 +56,14 @@ function HomePage() {
           tempUsers.push(Object.assign(tempObject, { uid: document.id }));
         }
       });
-      //every time home page loads, get list of unwated uid and update the state! 
+      //every time home page loads, get list of unwated uid and update the state!
       const curDocRef = doc(db, "users", curUserID);
-      const curDocSnap = await getDoc(curDocRef); 
-      var listOfUnwantedUID = []; 
-      if(curDocSnap.exists()){
-        const curDocData = curDocSnap.data(); 
-        listOfUnwantedUID = curDocData["NotInterested"]; 
-        setNotInterested(listOfUnwantedUID); 
+      const curDocSnap = await getDoc(curDocRef);
+      var listOfUnwantedUID = [];
+      if (curDocSnap.exists()) {
+        const curDocData = curDocSnap.data();
+        listOfUnwantedUID = curDocData["NotInterested"];
+        setNotInterested(listOfUnwantedUID);
       }
 
       const naiveMatches = getNaiveMatches(await fetchAllData(), curUserID);

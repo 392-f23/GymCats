@@ -27,7 +27,7 @@ function FormPage() {
             PartnerPreferences: data?.PartnerPreferences || {},
           });
         } else {
-          console.log("Document not found");
+          console.error("Document not found");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
