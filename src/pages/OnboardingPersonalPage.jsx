@@ -18,7 +18,6 @@ const OnboardingPersonalPage = ({
   const navigate = useNavigate();
 
   const GoBack = async () => {
-    console.log(dbState);
     await submitFormInformation(dbState);
     handleLogOut(navigate);
     previousStep();

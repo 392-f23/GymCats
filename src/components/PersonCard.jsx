@@ -263,7 +263,6 @@ function PersonCard({
                     },
                   }}
                   onClick={() => {
-                    console.log(`interested person id: ${id}`);
                     handleInterested(name, id);
                   }}
                 >
