@@ -111,7 +111,7 @@ function App() {
               />
             ))}
           </Routes>
-          <Navbar />
+          {isSignedIn && <Navbar />}
         </BrowserRouter>
       </ThemeProvider>
     </LoadingContainer>
