@@ -17,9 +17,13 @@ const EditPersonalPage = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [displayName, setDisplayName] = useState("");
 
   const getInitialData = async () => {
+    setIsLoading(true);
     const data = await fetchPersonalData();
+    const { displayName: fetchedName } = data;
+    setDisplayName(fetchedName);
     setDBState(data);
     setIsLoading(false);
   };
@@ -33,7 +37,7 @@ const EditPersonalPage = () => {
       <Box
         sx={{ backgroundColor: theme.palette.primary[1], minHeight: "100%" }}
       >
-        <ProfileHeader />
+        <ProfileHeader displayName={displayName} />
         <Box>
           <Container>
             <MultiSelect
