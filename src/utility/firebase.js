@@ -200,6 +200,7 @@ export const fetchAllData = async () => {
   userCol.forEach((doc) => {
     userData[doc.id] = doc.data();
   });
+
   return userData;
 };
 

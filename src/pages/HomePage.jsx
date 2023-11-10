@@ -21,15 +21,14 @@ function HomePage() {
   const [notInterested, setNotInterested] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [allData, setAllData] = useState({});
+  const [refetch, setRefetch] = useState(false);
 
-  const handleNotInterested = (id) => {
-    alert(
-      `We have sent a notification to person with id: ${id} that you are't interested!`
-    );
+  const handleNotInterested = async (id) => {
     //this call does update the DB!
-    addNotInterested(id);
+    await addNotInterested(id);
     //we still might want the state to be in sync with db state! Tack on the new id val!
     setNotInterested((prev) => [...prev, id]);
+    setRefetch(!refetch);
   };
 
   const handleInterested = (name, id) => {
@@ -56,6 +55,7 @@ function HomePage() {
           tempUsers.push(Object.assign(tempObject, { uid: document.id }));
         }
       });
+
       //every time home page loads, get list of unwated uid and update the state!
       const curDocRef = doc(db, "users", curUserID);
       const curDocSnap = await getDoc(curDocRef);
@@ -71,7 +71,8 @@ function HomePage() {
       setIsLoading(false);
     };
     init();
-  }, []);
+  }, [refetch]);
+
   return (
     <LoadingContainer isLoading={isLoading}>
       <Box

@@ -36,8 +36,9 @@ const RequestsPage = () => {
 
       if (friendPromises.length > 0) {
         await Promise.all(friendPromises).then((userData) => {
-          const [user] = userData;
-          tempFriends.push(user);
+          userData.forEach((ud) => {
+            tempFriends.push(ud);
+          });
         });
       }
 

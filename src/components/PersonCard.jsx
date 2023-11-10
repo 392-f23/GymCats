@@ -52,6 +52,16 @@ function PersonCard({
       Friends: newFriends,
     });
 
+    const friendInfo = await fetchUserData(id);
+    const { Friends: updateFriendList } = friendInfo;
+    const newFriendList = updateFriendList.filter(
+      (friendId) => friendId != uid
+    );
+    const friendRef = doc(db, "users", id);
+    await updateDoc(friendRef, {
+      Friends: newFriendList,
+    });
+
     setRefetch(!refetch);
     handleClose();
   };
