@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ displayName }) => {
   const theme = useTheme();
 
   return (
@@ -32,9 +32,7 @@ const ProfileHeader = () => {
             marginRight: "10px",
           }}
         />
-        <Typography variant="h5">
-          Welcome Back, {localStorage.getItem("name")}!
-        </Typography>
+        <Typography variant="h5">Welcome Back, {displayName}!</Typography>
       </Box>
     </Box>
   );

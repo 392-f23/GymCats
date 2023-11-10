@@ -18,9 +18,13 @@ const EditPreferencePage = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [displayName, setDisplayName] = useState("");
 
   const getInitialData = async () => {
+    setIsLoading(true);
     const data = await fetchPersonalData();
+    const { displayName: fetchedName } = data;
+    setDisplayName(fetchedName);
     setDBState(data);
     setIsLoading(false);
   };
@@ -29,6 +33,12 @@ const EditPreferencePage = () => {
     getInitialData();
   }, []);
 
+  const saveData = async () => {
+    setIsLoading(true);
+    await submitFormInformation(dbState);
+    setIsLoading(false);
+  };
+
   return (
     <LoadingContainer isLoading={isLoading}>
       <Box
@@ -36,7 +46,7 @@ const EditPreferencePage = () => {
           backgroundColor: theme.palette.primary[1],
         }}
       >
-        <ProfileHeader />
+        <ProfileHeader displayName={displayName} />
         <Box>
           <Container>
             <MultiSelect
@@ -110,8 +120,7 @@ const EditPreferencePage = () => {
                   },
                 }}
                 onClick={() => {
-                  submitFormInformation(dbState);
-                  navigate("/profile");
+                  saveData();
                 }}
               >
                 Save
