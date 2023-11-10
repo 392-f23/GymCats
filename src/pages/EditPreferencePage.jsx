@@ -33,6 +33,12 @@ const EditPreferencePage = () => {
     getInitialData();
   }, []);
 
+  const saveData = async () => {
+    setIsLoading(true);
+    await submitFormInformation(dbState);
+    setIsLoading(false);
+  };
+
   return (
     <LoadingContainer isLoading={isLoading}>
       <Box
@@ -114,8 +120,7 @@ const EditPreferencePage = () => {
                   },
                 }}
                 onClick={() => {
-                  submitFormInformation(dbState);
-                  navigate("/profile");
+                  saveData();
                 }}
               >
                 Save

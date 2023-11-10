@@ -32,6 +32,12 @@ const EditPersonalPage = () => {
     getInitialData();
   }, []);
 
+  const saveData = async () => {
+    setIsLoading(true);
+    await submitFormInformation(dbState);
+    setIsLoading(false);
+  };
+
   return (
     <LoadingContainer isLoading={isLoading}>
       <Box
@@ -107,8 +113,7 @@ const EditPersonalPage = () => {
                   },
                 }}
                 onClick={() => {
-                  submitFormInformation(dbState);
-                  // navigate("/profile");
+                  saveData();
                 }}
               >
                 Save
