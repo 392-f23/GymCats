@@ -121,6 +121,7 @@ const OnboardingPreferencePage = ({
             display: "flex",
             justifyContent: "space-between",
             alignitems: "center",
+            marginBottom: "100px",
           }}
         >
           <Button
