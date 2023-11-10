@@ -101,8 +101,8 @@ function FriendRequestCard({ person, refetch, setRefetch }) {
               component="img"
               src={photoURL}
               sx={{
-                width: "50px",
-                height: "50px",
+                width: "40px",
+                height: "40px",
                 borderRadius: "50%",
                 ml: 2,
                 mr: 2,
@@ -177,8 +177,8 @@ function FriendRequestCard({ person, refetch, setRefetch }) {
               <IconButton
                 sx={{
                   backgroundColor: theme.palette.primary[5],
-                  width: "50px",
-                  height: "50px",
+                  width: "40px",
+                  height: "40px",
                   ml: 2,
                   mr: 2,
                   filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))",

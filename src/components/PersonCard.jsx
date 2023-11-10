@@ -277,7 +277,7 @@ function PersonCard({
                   }}
                 >
                   <Typography variant="p" sx={{ fontSize: "0.9rem" }}>
-                    Interested
+                    I am Interested
                   </Typography>
                 </Button>
               </>
